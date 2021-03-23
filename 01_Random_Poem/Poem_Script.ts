@@ -1,33 +1,28 @@
 namespace Poemwords {
-    var Subjekte: string [] = ["Captain America ", "Iron Man ", "Thor ", "Hulk ", "Hawkeye ", "Black Widow "]
-    var Prädikate: string [] = ["bekämpft ", "rettet ", "baut ", "zerstört ", "redet über ", "trainiert "]
-    var Objekte: string [] = ["Thanos", "Ultron", "New York", "die Welt", "Shield", "die Guardians"]
+    export var Subjekte: string [] = ["Captain America ", "Iron Man ", "Thor ", "Hulk ", "Hawkeye ", "Black Widow "]
+    export var Prädikate: string [] = ["bekämpft ", "rettet ", "baut ", "zerstört ", "redet über ", "trainiert "]
+    export var Objekte: string [] = ["Thanos", "Ultron", "New York", "die Welt", "Shield", "die Guardians"]
+}
 
-    var Poem1: String = "";
+for ( var index = Poemwords.Subjekte.length; index >= 1; index-- ) {
+    console.log(index);
 
-    var PoemNumbers :number = Math.floor(Math.random() * Subjekte.length)
+    var Satz = getVerse(Poemwords.Subjekte, Poemwords.Prädikate, Poemwords.Objekte);
 
-    console.log(PoemNumbers);
+    console.log(Satz)
+}
 
-    for ( var index = Subjekte.length; index >= 1; index-- ) {
-        console.log(index);
+function getVerse (_Subjekte: string[], _Prädikate:string[], _Objekte:string[]): string {
 
-        var SubjektRandomNumber :number = Math.floor(Math.random() * Subjekte.length)
-        var PrädikatRandomNumber :number = Math.floor(Math.random() * Prädikate.length)
-        var ObjektRandomNumber :number = Math.floor(Math.random() * Objekte.length)
+    var SubjektRandomNumber :number = Math.floor(Math.random() * _Subjekte.length)
+    var PrädikatRandomNumber :number = Math.floor(Math.random() * _Prädikate.length)
+    var ObjektRandomNumber :number = Math.floor(Math.random() * _Objekte.length)
 
-        Poem1 = Subjekte[SubjektRandomNumber] + Prädikate[PrädikatRandomNumber] + Objekte[ObjektRandomNumber];
-        console.log(Poem1);
+    var ResultTemp = _Subjekte[SubjektRandomNumber] + _Prädikate[PrädikatRandomNumber] + _Objekte[ObjektRandomNumber];
 
-        Subjekte.splice(SubjektRandomNumber);
-        Prädikate.splice(SubjektRandomNumber);
-        Objekte.splice(SubjektRandomNumber);
+    _Subjekte.splice(SubjektRandomNumber,1);
+    _Prädikate.splice(PrädikatRandomNumber,1);
+    _Objekte.splice(ObjektRandomNumber,1);
 
-        var Satz = getVerse(Subjekte, Prädikate, Objekte);
-    }
-
-    function getVerse (_Subjekte: string[], _Prädikate:string[], _Objekte:string[]): string {
-        return _Subjekte[SubjektRandomNumber] + _Prädikate[PrädikatRandomNumber] + _Objekte[ObjektRandomNumber];
-    }
-
+    return ResultTemp;
 }
