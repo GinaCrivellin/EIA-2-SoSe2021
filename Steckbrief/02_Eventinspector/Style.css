@@ -1,0 +1,45 @@
+html, body {
+    height: 100%;
+    margin: 0 8px;
+}
+
+body{
+    text-align: center;
+    display: grid;
+    grid-template-rows: min-content min-content auto;
+}
+
+span {
+    position: fixed;
+    border: dotted thin black;
+    font-size: small;
+    z-index: 100;
+}
+
+#divContainer {
+    display: flex;
+    flex-direction: row;
+}
+
+#div0{
+    position: relative;
+    border: thin solid black;
+    background-color: blanchedalmond;
+    top: 0px;
+    left: 0px;
+    height: 500px;
+    width: 500px;
+    margin: 5px;
+}
+
+
+#div1{
+    position: relative;
+    border: thin solid black;
+    background-color: blanchedalmond;
+    top: 0px;
+    left: 0px;
+    height: 500px;
+    width: 500px;
+    margin: 5px;
+}
