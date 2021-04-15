@@ -1,9 +1,13 @@
 "use strict";
 window.addEventListener("load", handleLoad);
+// Button from HTML
+var button = document.querySelector("button");
 function handleLoad(_event) {
     document.addEventListener("mousemove", setInfoBox);
     document.addEventListener("click", logInfo);
     document.addEventListener("keyup", logInfo);
+    document.addEventListener("riseup", ConsoleOutput);
+    button.addEventListener("click", RiseEvent);
 }
 function setInfoBox(_event) {
     let x = _event.pageX;
@@ -21,18 +25,15 @@ function logInfo(_event) {
     console.log(_event.currentTarget);
     console.log(_event);
 }
-// Button from HTML
-var button = document.querySelector("button");
 // Custom Event
 var buttonClickEvent = new CustomEvent("riseup", {
     detail: null
 });
-// Listener
-button.addEventListener("riseup", ConsoleOutput);
+function RiseEvent(_event) {
+    document.dispatchEvent(buttonClickEvent);
+}
 // Function with output
 function ConsoleOutput(_event) {
     console.log(_event);
 }
-// Body as target
-document.body.dispatchEvent(buttonClickEvent);
 //# sourceMappingURL=Script.js.map

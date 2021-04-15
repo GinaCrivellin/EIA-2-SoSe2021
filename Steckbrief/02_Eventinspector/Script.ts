@@ -1,11 +1,18 @@
 window.addEventListener("load", handleLoad);
 
+// Button from HTML
+var button: HTMLElement = document.querySelector("button")!;
+
 function handleLoad(_event: Event): void {
 
     document.addEventListener("mousemove", setInfoBox);
 
     document.addEventListener("click", logInfo);
     document.addEventListener("keyup", logInfo);
+
+    document.addEventListener("riseup", ConsoleOutput);
+
+    button.addEventListener("click", RiseEvent);
 
 }
 
@@ -33,25 +40,19 @@ function logInfo (_event: Event): void {
     console.log(_event);
 }
 
-// Button from HTML
-var button: HTMLElement = document.querySelector("button")!;
 
 // Custom Event
 var buttonClickEvent: CustomEvent = new CustomEvent("riseup", {
     detail: null
 });
 
-// Listener
-button.addEventListener("riseup", ConsoleOutput);
+function RiseEvent(_event: Event): void {
+    document.dispatchEvent(buttonClickEvent);
+}
 
 // Function with output
 function ConsoleOutput(_event: Event): void {
     console.log(_event);
    }
-
-// Body as target
-document.body.dispatchEvent(buttonClickEvent);
-
-
 
 
