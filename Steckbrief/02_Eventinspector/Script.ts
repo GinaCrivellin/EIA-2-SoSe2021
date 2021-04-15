@@ -2,7 +2,7 @@ window.addEventListener("load", handleLoad);
 
 function handleLoad(_event: Event): void {
 
-    document.body.addEventListener("mousemove", setInfoBox);
+    document.addEventListener("mousemove", setInfoBox);
 
     document.addEventListener("click", logInfo);
     document.addEventListener("keyup", logInfo);
@@ -17,8 +17,8 @@ function setInfoBox(_event: MouseEvent): void {
 
     let position: HTMLElement = span;
 
-    position.style.top = y  + "px";
-    position.style.left = x + "px";
+    position.style.top = (y + 20) + "px";
+    position.style.left = (x + 20) + "px";
 
     position.textContent = "x-Koordinate = " + x + "y-Koordinate = " + y
                            + _event.target;
