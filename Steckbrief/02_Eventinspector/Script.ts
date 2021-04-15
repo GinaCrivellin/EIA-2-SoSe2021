@@ -32,3 +32,26 @@ function logInfo (_event: Event): void {
     console.log(_event.currentTarget);
     console.log(_event);
 }
+
+// Button from HTML
+var button: HTMLElement = document.querySelector("button")!;
+
+// Custom Event
+var buttonClickEvent: CustomEvent = new CustomEvent("riseup", {
+    detail: null
+});
+
+// Listener
+button.addEventListener("riseup", ConsoleOutput);
+
+// Function with output
+function ConsoleOutput(_event: Event): void {
+    console.log(_event);
+   }
+
+// Body as target
+document.body.dispatchEvent(buttonClickEvent);
+
+
+
+

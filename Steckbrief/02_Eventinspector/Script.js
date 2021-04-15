@@ -21,4 +21,18 @@ function logInfo(_event) {
     console.log(_event.currentTarget);
     console.log(_event);
 }
+// Button from HTML
+var button = document.querySelector("button");
+// Custom Event
+var buttonClickEvent = new CustomEvent("riseup", {
+    detail: null
+});
+// Listener
+button.addEventListener("riseup", ConsoleOutput);
+// Function with output
+function ConsoleOutput(_event) {
+    console.log(_event);
+}
+// Body as target
+document.body.dispatchEvent(buttonClickEvent);
 //# sourceMappingURL=Script.js.map
