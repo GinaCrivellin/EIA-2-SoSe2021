@@ -10,8 +10,8 @@ function handleLoad(_event: Event): void {
 }
 
 function setInfoBox(_event: MouseEvent): void {
-    let x: number = _event.clientX;
-    let y: number = _event.clientY;
+    let x: number = _event.pageX;
+    let y: number = _event.pageY;
 
     var span: HTMLElement = <HTMLElement> document.querySelector("span");
 

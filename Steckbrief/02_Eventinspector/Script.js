@@ -6,8 +6,8 @@ function handleLoad(_event) {
     document.addEventListener("keyup", logInfo);
 }
 function setInfoBox(_event) {
-    let x = _event.clientX;
-    let y = _event.clientY;
+    let x = _event.pageX;
+    let y = _event.pageY;
     var span = document.querySelector("span");
     let position = span;
     position.style.top = (y + 20) + "px";
