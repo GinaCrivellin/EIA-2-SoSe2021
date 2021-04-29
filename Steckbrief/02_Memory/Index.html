@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="style.css"></style>
+    <title>Document</title>
+</head>
+<body>
+
+<h1>Hallo</h1>
+
+<form id="formElement">
+
+    <fieldset id="fsSpecial">
+		<legend> How many pairs do you want? </legend>
+		card pairs
+		<input type="number" name="Stepper" step="1" min="5" max="20" value="0" id="stepper" />
+	</fieldset>
+
+    <fieldset>
+        <legend> How big should your cards be?</legend>
+        card size
+		<input type="range" name="Slider" min="0" max="40" step="10" value="0" id="slider" />
+    </fieldset>
+
+    <fieldset>
+        <legend> Choose the colours of your game</legend>
+        background color
+		<input type="color" name="background" placeholder="red" id="backgroundColor" value="#ff0000">
+        <hr>
+        card color
+		<input type="color" name="cardback" placeholder="red" id="cardColor" value="#ff0000">
+        <hr>
+        font color
+		<input type="color" name="fontcolor" placeholder="red" id="fontColor" value="#ff0000">
+    </fieldset>
+
+    <fieldset>
+        <legend> Choose your font type</legend>
+        <input type="radio" name="Radio1" value="Times New Roman" id="radio1" />
+		<label for="radio1">Times New Roman</label>
+		<input type="radio" name="Radio2" value="Verdana" id="radio2" />
+		<label for="radio2">Verdana</label>
+		<input type="radio" name="Radio3" value="Courier New" id="radio3" />
+		<label for="radio3">Courier New</label>
+    </fieldset>
+
+    <button id="startButton">start game</button>
+
+</form>
+
+
+    
+    
+</body>
+</html>
