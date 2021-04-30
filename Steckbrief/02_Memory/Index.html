@@ -23,7 +23,7 @@
     <fieldset>
         <legend> How big should your cards be?</legend>
         card size
-		<input type="range" name="Slider" min="0" max="40" step="10" value="0" id="slider" />
+		<input type="range" name="Slider" min="50" max="100" step="10" value="0" id="slider" />
     </fieldset>
 
     <fieldset>
@@ -32,23 +32,23 @@
 		<input type="color" name="background" placeholder="red" id="backgroundColor" value="#ff0000">
         <hr>
         card color
-		<input type="color" name="cardback" placeholder="red" id="cardColor" value="#ff0000">
+		<input type="color" name="cardback" placeholder="yellow" id="cardColor" value="#0000ff">
         <hr>
         font color
-		<input type="color" name="fontcolor" placeholder="red" id="fontColor" value="#ff0000">
+		<input type="color" name="fontcolor" placeholder="black" id="fontColor" value="#00ff00">
     </fieldset>
 
     <fieldset>
         <legend> Choose your font type</legend>
-        <input type="radio" name="Radio1" value="Times New Roman" id="radio1" />
+        <input checked type="radio" name="Radio1" value="Times New Roman" id="radio1" />
 		<label for="radio1">Times New Roman</label>
-		<input type="radio" name="Radio2" value="Verdana" id="radio2" />
+		<input type="radio" name="Radio1" value="Verdana" id="radio2" />
 		<label for="radio2">Verdana</label>
-		<input type="radio" name="Radio3" value="Courier New" id="radio3" />
+		<input type="radio" name="Radio1" value="Courier New" id="radio3" />
 		<label for="radio3">Courier New</label>
     </fieldset>
 
-    <button id="startButton">start game</button>
+    <button id="startButton" type="button">start game</button>
 
 </form>
 

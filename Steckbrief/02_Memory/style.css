@@ -1,0 +1,33 @@
+h1 {
+    color: salmon;
+}
+.front{
+    background-color: sandybrown;
+    flex-direction: column;
+    position: relative;
+    margin: 5px;
+    align-self: center;
+    display: none;
+}
+
+.back{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin: 5px;
+    align-self: center;
+}
+
+.bord{
+    position: absolute;
+    display: flex;
+    flex-direction:row;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    width: 900px;
+    height: 500px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
