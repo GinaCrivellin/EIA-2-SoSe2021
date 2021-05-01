@@ -160,7 +160,94 @@ function startGame(): void {
         {
             back: "pink",
             front: "I"
+        },
+
+        {
+            back: "pink",
+            front: "J"
+        },
+
+        {
+            back: "pink",
+            front: "K"
+        },
+
+        {
+            back: "pink",
+            front: "L"
+        },
+
+        {
+            back: "pink",
+            front: "M"
+        },
+
+        {
+            back: "pink",
+            front: "N"
+        },
+
+        {
+            back: "pink",
+            front: "O"
+        },
+
+        {
+            back: "pink",
+            front: "P"
+        },
+
+        {
+            back: "pink",
+            front: "Q"
+        },
+
+
+        {
+            back: "pink",
+            front: "R"
+        },
+
+        {
+            back: "pink",
+            front: "S"
+        },
+
+        {
+            back: "pink",
+            front: "T"
+        },
+
+        {
+            back: "pink",
+            front: "U"
+        },
+
+        {
+            back: "pink",
+            front: "V"
+        },
+
+        {
+            back: "pink",
+            front: "W"
+        },
+
+        {
+            back: "pink",
+            front: "X"
+        },
+
+        {
+            back: "pink",
+            front: "Y"
+        },
+
+        {
+            back: "pink",
+            front: "Z"
         }
+    
     ];
 
     var cardRange: CardInterface [] = [];
@@ -179,6 +266,8 @@ function startGame(): void {
 let clickedCards: ClickedCardsInterface [] = [];
 
 var allCardsOnField: ClickedCardsInterface [] = [];
+
+let clickable: boolean = true;
 
 function createCard (_card: CardInterface, _cardSize: Number, _backgroundColor: string, _cardColor: string, _fontColor: string, _fontType: string): void {
 
@@ -219,28 +308,35 @@ function createCard (_card: CardInterface, _cardSize: Number, _backgroundColor: 
 
     back.addEventListener("click", function(): void {
 
+        console.log("Eventlistener");
+
+        if (clickable == false) {
+            return;
+        }
+
         back.style.display = "none";
         front.style.display = "block";
 
         clickedCards.push(card);
 
         if (clickedCards.length == 1) {
-            console.log('one card selected, returning');
             return;
         }
 
         var card1: ClickedCardsInterface = clickedCards[0];
         var card2: ClickedCardsInterface = clickedCards[1];
 
-        console.log('Two cards are selected');
         if (clickedCards.length == 2) {
-            console.log('Testing cards...');
+
+            clickable = false;
+
             var areCardsEqual: boolean = isEqual(clickedCards[0], clickedCards[1]);
+
 
             console.log(areCardsEqual);
 
             if (areCardsEqual == true) {
-                // Nach 2 Sekunden wredne passende Karten ausgeblendet
+
                 setTimeout(function(): void {
                     card1.front.style.display = "none";
                     card2.front.style.display = "none";
@@ -250,7 +346,8 @@ function createCard (_card: CardInterface, _cardSize: Number, _backgroundColor: 
 
                     allCardsOnField.splice(allCardsOnField.indexOf(card1), 1);
                     allCardsOnField.splice(allCardsOnField.indexOf(card2), 1);
-                    // Wenn zwei passende Karten gefunden wurden, soll der Spieler wieder klicken können um den nächsten Zug zu machen
+                    clickable = true;
+
                 },         2000);
             }
 
@@ -260,7 +357,7 @@ function createCard (_card: CardInterface, _cardSize: Number, _backgroundColor: 
                     card2.back.style.display = "block";
                     card1.front.style.display = "none";
                     card2.front.style.display = "none";
-                    // Wenn zwei passende Karten gefunden wurden, soll der Spieler wieder klicken können um den nächsten Zug zu machen
+                    clickable = true;
                 },         2000);
 
             }
@@ -271,5 +368,5 @@ function createCard (_card: CardInterface, _cardSize: Number, _backgroundColor: 
 }
 
 function isEqual(first: ClickedCardsInterface, second: ClickedCardsInterface): boolean {
-    return first.front === second.front;
+    return first.front.innerHTML === second.front.innerHTML;
 }

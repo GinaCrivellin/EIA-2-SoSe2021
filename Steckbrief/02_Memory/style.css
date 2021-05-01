@@ -1,5 +1,14 @@
+body{
+    background-image: url(bg.jpg);
+}
 h1 {
     color: salmon;
+    text-align: center;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+form{
+    background-color: hsl(25, 100%, 97%, 0.9);
 }
 .front{
     background-color: sandybrown;
@@ -8,6 +17,7 @@ h1 {
     margin: 5px;
     align-self: center;
     display: none;
+    font-size: x-large;
 }
 
 .back{

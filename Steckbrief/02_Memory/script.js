@@ -106,6 +106,74 @@ function startGame() {
         {
             back: "pink",
             front: "I"
+        },
+        {
+            back: "pink",
+            front: "J"
+        },
+        {
+            back: "pink",
+            front: "K"
+        },
+        {
+            back: "pink",
+            front: "L"
+        },
+        {
+            back: "pink",
+            front: "M"
+        },
+        {
+            back: "pink",
+            front: "N"
+        },
+        {
+            back: "pink",
+            front: "O"
+        },
+        {
+            back: "pink",
+            front: "P"
+        },
+        {
+            back: "pink",
+            front: "Q"
+        },
+        {
+            back: "pink",
+            front: "R"
+        },
+        {
+            back: "pink",
+            front: "S"
+        },
+        {
+            back: "pink",
+            front: "T"
+        },
+        {
+            back: "pink",
+            front: "U"
+        },
+        {
+            back: "pink",
+            front: "V"
+        },
+        {
+            back: "pink",
+            front: "W"
+        },
+        {
+            back: "pink",
+            front: "X"
+        },
+        {
+            back: "pink",
+            front: "Y"
+        },
+        {
+            back: "pink",
+            front: "Z"
         }
     ];
     var cardRange = [];
@@ -120,6 +188,7 @@ function startGame() {
 }
 let clickedCards = [];
 var allCardsOnField = [];
+let clickable = true;
 function createCard(_card, _cardSize, _backgroundColor, _cardColor, _fontColor, _fontType) {
     let bord = document.getElementById("bord");
     bord.style.backgroundColor = _backgroundColor;
@@ -147,22 +216,23 @@ function createCard(_card, _cardSize, _backgroundColor, _cardColor, _fontColor, 
     };
     allCardsOnField.push(card);
     back.addEventListener("click", function () {
+        console.log("Eventlistener");
+        if (clickable == false) {
+            return;
+        }
         back.style.display = "none";
         front.style.display = "block";
         clickedCards.push(card);
         if (clickedCards.length == 1) {
-            console.log('one card selected, returning');
             return;
         }
         var card1 = clickedCards[0];
         var card2 = clickedCards[1];
-        console.log('Two cards are selected');
         if (clickedCards.length == 2) {
-            console.log('Testing cards...');
+            clickable = false;
             var areCardsEqual = isEqual(clickedCards[0], clickedCards[1]);
             console.log(areCardsEqual);
             if (areCardsEqual == true) {
-                // Nach 2 Sekunden wredne passende Karten ausgeblendet
                 setTimeout(function () {
                     card1.front.style.display = "none";
                     card2.front.style.display = "none";
@@ -170,7 +240,7 @@ function createCard(_card, _cardSize, _backgroundColor, _cardColor, _fontColor, 
                     card2.back.style.display = "none";
                     allCardsOnField.splice(allCardsOnField.indexOf(card1), 1);
                     allCardsOnField.splice(allCardsOnField.indexOf(card2), 1);
-                    // Wenn zwei passende Karten gefunden wurden, soll der Spieler wieder klicken können um den nächsten Zug zu machen
+                    clickable = true;
                 }, 2000);
             }
             if (areCardsEqual == false) {
@@ -179,7 +249,7 @@ function createCard(_card, _cardSize, _backgroundColor, _cardColor, _fontColor, 
                     card2.back.style.display = "block";
                     card1.front.style.display = "none";
                     card2.front.style.display = "none";
-                    // Wenn zwei passende Karten gefunden wurden, soll der Spieler wieder klicken können um den nächsten Zug zu machen
+                    clickable = true;
                 }, 2000);
             }
             clickedCards = [];
@@ -187,6 +257,6 @@ function createCard(_card, _cardSize, _backgroundColor, _cardColor, _fontColor, 
     });
 }
 function isEqual(first, second) {
-    return first.front === second.front;
+    return first.front.innerHTML === second.front.innerHTML;
 }
 //# sourceMappingURL=script.js.map
