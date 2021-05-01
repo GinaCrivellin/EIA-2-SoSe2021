@@ -9,6 +9,7 @@ h1 {
 
 form{
     background-color: hsl(25, 100%, 97%, 0.9);
+    font-family: 'Courier New', Courier, monospace;
 }
 .front{
     background-color: sandybrown;
