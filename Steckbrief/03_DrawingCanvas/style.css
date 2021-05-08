@@ -1,0 +1,7 @@
+#CanvasID{
+    width: 600px;
+    height: 600px;
+    top: 0%;
+    left: 50%;
+    transform: translate(50%, 0%);
+}
