@@ -9,15 +9,14 @@ namespace Canvas {
         canvas.id = "CanvasID";
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        canvas.style.backgroundColor = "#89Cff0";
+        canvas.style.backgroundColor = "#4c6273";
 
         crc2 = canvas.getContext("2d")!;
 
-        drawMountians(window.innerHeight * 0.4, "#4f4942");
-        drawMountians(window.innerHeight * 0.5, "#787067");
+        drawMountians(window.innerHeight * 0.4, "#414447", "#a3adb5");
+        drawMountians(window.innerHeight * 0.5, "#5b6166", "#b7c1c9");
 
         drawSun();
-
 
         drawGrass();
 
@@ -28,7 +27,6 @@ namespace Canvas {
 
         drawTulipsL();
         //drawTulipsR();
-
         }
 
         var randomXClouds1: number = Math.random() * (window.innerWidth * 0.3);
@@ -43,7 +41,6 @@ namespace Canvas {
         //drawCloud({ x: 700, y: 300 }, { x: 250, y: 75 });
 
         drawSun();
-
     }
 
     function drawGrass (): void {
@@ -58,9 +55,9 @@ namespace Canvas {
         crc2.strokeStyle = "rgba(1, 1, 1, 0)";
 
         let gradient: CanvasGradient = crc2.createLinearGradient(0, 0, 0, crc2.canvas.height);
-        gradient.addColorStop(0, "#a9e08d");
-        gradient.addColorStop(0.5, "#e1ffd1");
-        gradient.addColorStop(1, "#37472f");
+        gradient.addColorStop(0, "#3ba356");
+        gradient.addColorStop(0.5, "#4f8f4f");
+        gradient.addColorStop(1, "#376142");
         crc2.fillStyle = gradient;
         crc2.fill();
 
@@ -97,7 +94,6 @@ namespace Canvas {
 
         crc2.stroke();
 
-    
         for (var i: number = 90; i > 10 ; i -= 10) {
             crc2.beginPath();
             moveTo(10, 20);
@@ -309,8 +305,8 @@ namespace Canvas {
         let gradient: CanvasGradient = crc2.createRadialGradient(0, 0, 0, 0, 0, radiusParticle);
 
         particle.arc(0, 0, radiusParticle, 0, 2 * Math.PI);
-        gradient.addColorStop(0, "HSLA(0, 100%, 100%, 0.5)");
-        gradient.addColorStop(1, "HSLA(0, 100%, 100%, 0)");
+        gradient.addColorStop(0, "HSLA(200, 30%, 80%, 0.5)");
+        gradient.addColorStop(1, "HSLA(100, 10%, 70%, 0)");
 
         crc2.save();
         crc2.translate(_positionX, _positionY);
@@ -345,7 +341,7 @@ namespace Canvas {
 
     //inspired by Jirka
 
-    function drawMountians (_height: number, _color: string): void {
+    function drawMountians (_height: number, _colorLow: string, _colorHigh: string): void {
 
         var min: number = 70;
         var max: number = 200;
@@ -371,12 +367,16 @@ namespace Canvas {
         crc2.lineTo(window.innerWidth, window.innerHeight * 0.6);
         crc2.closePath();
 
-        crc2.fillStyle = _color;
+        let gradient: CanvasGradient = crc2.createLinearGradient(0, 0, 0, -max);
+        gradient.addColorStop(0, _colorLow);
+        gradient.addColorStop(0.9, _colorHigh);
+
+        crc2.fillStyle = gradient;
         crc2.fill();
 
         crc2.restore();
 
-        console.log("im at mountinas!")
+        console.log("im at mountinas!");
 }
 
     function drawSun (): void {
