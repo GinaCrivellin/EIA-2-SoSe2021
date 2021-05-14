@@ -13,14 +13,21 @@ namespace Canvas {
 
         crc2 = canvas.getContext("2d")!;
 
+        for (var i: number = 0; i < 15; i++) {
+            var randomX: number = Math.random() * (window.innerWidth);
+            var randomY: number = Math.random() * ((window.innerHeight * 0.6 - window.innerHeight * 0.3 ) + window.innerHeight * 0.1);
+
+            drawStar(randomX, randomY, 5, 10, 15);
+        }
+
         drawMountians(window.innerHeight * 0.4, "#414447", "#a3adb5");
         drawMountians(window.innerHeight * 0.5, "#5b6166", "#b7c1c9");
 
-        drawSun();
+        drawMoon();
 
         drawGrass();
 
-        for (var i: number = 0; i < 10; i++) {
+        for (var y: number = 0; y < 10; y++) {
 
         drawFlowersL();
         drawFlowersR();
@@ -40,7 +47,8 @@ namespace Canvas {
         //drawCloud(500, 120, 250, 75);
         //drawCloud({ x: 700, y: 300 }, { x: 250, y: 75 });
 
-        drawSun();
+        drawMoon();
+        
     }
 
     function drawGrass (): void {
@@ -379,7 +387,7 @@ namespace Canvas {
         console.log("im at mountinas!");
 }
 
-    function drawSun (): void {
+    function drawMoon (): void {
 
         console.log("Im at Sun!");
 
@@ -404,8 +412,60 @@ namespace Canvas {
         crc2.restore();
     }
 
+    function drawStars (): void {
 
+        var randomX: number = Math.random() * (window.innerWidth);
+        var randomY: number = Math.random() * ((window.innerHeight * 0.6 - window.innerHeight * 0.3 ) + window.innerHeight * 0.1);
 
+        crc2.save();
+
+        crc2.beginPath();
+        crc2. moveTo(randomX, randomY);
+        crc2.translate(randomX, randomY);
+        crc2.arc(0, 0, 5, 0, 2 * Math.PI);
+
+        crc2.fillStyle = "rgb(236, 242, 216)";
+        crc2.fill();
+
+        crc2.strokeStyle = "rgba(1, 1, 1, 0)";
+
+        crc2.stroke();
+
+        crc2.restore();
+    }
+
+    function drawStar (_cx: any, cy:any,spikes:any, outerRadius:any, innerRadius:any): void { 
+        var rot: number = Math.PI / 2 * 3;
+        var x: number = _cx;
+        var y: number = cy;
+        var step: number = Math.PI / spikes;
+
+        crc2.save();
+  
+        crc2.beginPath();
+        crc2.moveTo(_cx, cy - outerRadius);
+        for (var i: number = 0; i < spikes; i++) {
+          x = _cx + Math.cos(rot) * outerRadius;
+          y = cy + Math.sin(rot) * outerRadius;
+          crc2.lineTo(x, y);
+          rot += step;
+  
+          x = _cx + Math.cos(rot) * innerRadius;
+          y = cy + Math.sin(rot) * innerRadius;
+          crc2.lineTo(x, y);
+          rot += step;
+        } 
+        crc2.lineTo(_cx, cy - outerRadius);
+        crc2.closePath();
+        crc2.lineWidth = 5;
+        crc2.strokeStyle = "rgba(1, 1, 1, 0)";
+        crc2.stroke();
+        crc2.fillStyle = "#f5f4cb";
+        crc2.fill();
+
+        crc2.restore();
+      
+    }
 
 }
 
