@@ -434,6 +434,8 @@ namespace Canvas {
         crc2.restore();
     }
 
+    // https://stackoverflow.com/questions/25837158/how-to-draw-a-star-by-using-canvas-html5
+
     function drawStar (_cx: any, cy:any,spikes:any, outerRadius:any, innerRadius:any): void { 
         var rot: number = Math.PI / 2 * 3;
         var x: number = _cx;
