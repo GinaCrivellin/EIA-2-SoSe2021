@@ -20,6 +20,22 @@ namespace OldMacDonaldsFarm {
 
     function handleload(): void {
 
+        var animalKinds: string [][] = [["cow", "grass", "muhh", ""], ["sheep", "carrots", "bähh"], ["pig", "apples", "oink"], ["chicken", "seeds", "bwak"], ["dog", "dogfood", "wuff"]];
+
+        for (let i: number = 0; i < animalKinds.length; i++) {
+
+            var t: Animal = new Animal(animalKinds[i][0], animalKinds[i][1], animalKinds[i][2]);
+
+            t.sing();
+
+            var amount: number = Math.random() * ((30 - 5) + 5);
+
+            t.eat(foodResources, amount);
+
+        }
+
+        /*
+
         var amount: number = Math.random() * ((30 - 5) + 5);
 
         //
@@ -61,6 +77,8 @@ namespace OldMacDonaldsFarm {
         dog.sing();
 
         dog.eat(foodResources, amount);
+
+        */
 
         
 

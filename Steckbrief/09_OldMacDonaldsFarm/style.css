@@ -1,8 +1,4 @@
-@media only screen and (max-width: 600px) {
-    body {
-        width: 100%;
-    }
-    canvas {
-        width: 100%;
-    }
-  }
+body {
+    background-image: url(bg.jpg);
+    size: 50%;
+}
