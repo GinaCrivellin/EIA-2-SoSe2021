@@ -10,7 +10,7 @@ var OldMacDonaldsFarm;
         dogfood: 80
     };
     function handleload() {
-        var animalKinds = [["cow", "grass", "muhh", ""], ["sheep", "carrots", "bähh"], ["pig", "apples", "oink"], ["chicken", "seeds", "bwak"], ["dog", "dogfood", "wuff"]];
+        var animalKinds = [["cow", "grass", "muhh"], ["sheep", "carrots", "bähh"], ["pig", "apples", "oink"], ["chicken", "seeds", "bwak"], ["dog", "dogfood", "wuff"]];
         for (let i = 0; i < animalKinds.length; i++) {
             var t = new OldMacDonaldsFarm.Animal(animalKinds[i][0], animalKinds[i][1], animalKinds[i][2]);
             t.sing();

@@ -3,6 +3,7 @@ namespace OldMacDonaldsFarm {
     window.addEventListener("load", handleload);
 
     export interface FoodResources {
+        [key: string]: number;
         grass: number;
         carrots: number;
         apples: number;
@@ -10,7 +11,7 @@ namespace OldMacDonaldsFarm {
         dogfood: number;
     }
 
-    var foodResources: FoodResources = {
+    let foodResources: FoodResources = {
     grass: 100, 
     carrots: 40,
     apples: 60,
@@ -20,15 +21,15 @@ namespace OldMacDonaldsFarm {
 
     function handleload(): void {
 
-        var animalKinds: string [][] = [["cow", "grass", "muhh", ""], ["sheep", "carrots", "bähh"], ["pig", "apples", "oink"], ["chicken", "seeds", "bwak"], ["dog", "dogfood", "wuff"]];
+        let animalKinds: string [][] = [["cow", "grass", "muhh"], ["sheep", "carrots", "bähh"], ["pig", "apples", "oink"], ["chicken", "seeds", "bwak"], ["dog", "dogfood", "wuff"]];
 
         for (let i: number = 0; i < animalKinds.length; i++) {
 
-            var t: Animal = new Animal(animalKinds[i][0], animalKinds[i][1], animalKinds[i][2]);
+            let t: Animal = new Animal(animalKinds[i][0], animalKinds[i][1], animalKinds[i][2]);
 
             t.sing();
 
-            var amount: number = Math.random() * ((30 - 5) + 5);
+            let amount: number = Math.random() * ((30 - 5) + 5);
 
             t.eat(foodResources, amount);
 
