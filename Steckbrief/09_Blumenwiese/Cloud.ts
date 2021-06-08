@@ -11,7 +11,6 @@ namespace Blumenwiese {
     constructor(_position: Vector, _size: Vector, _velocity: Vector, _x: number, _y: number) {
         this.position = _position;
         this.velocity = _velocity;
-        this.size = _size;
 
         this.x = _x;
         this.y = _y;

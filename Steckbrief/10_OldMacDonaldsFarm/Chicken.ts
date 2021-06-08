@@ -1,9 +1,10 @@
 namespace L10_OldMacDonaldsFarm {
 
-    export class Sheep extends Animal {
-        sound: string = "Bäähh";
-        action: string = "given whool for 2 sweaters";
+    export class Chicken extends Animal {
+        sound: string = "Boook";
+        action: string = "layed four eggs";
 
+        //wofür das super?
         constructor(_name: string, _food: string) {
             super(_name, _food);
         }

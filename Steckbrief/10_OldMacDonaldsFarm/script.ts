@@ -29,6 +29,15 @@ namespace L10_OldMacDonaldsFarm {
         let sheep: Sheep = new Sheep("sheep", "carrots");
         animalArray.push(sheep);
 
+        let pig: Pig = new Pig("pig", "apples");
+        animalArray.push(pig);
+
+        let chicken: Chicken = new Chicken("chicken", "seeds");
+        animalArray.push(chicken);
+
+        let dog: Dog = new Dog("dog", "dogfood");
+        animalArray.push(dog);
+
 
         for (let animal of animalArray) {
 

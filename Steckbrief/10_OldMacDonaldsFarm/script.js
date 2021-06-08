@@ -15,6 +15,12 @@ var L10_OldMacDonaldsFarm;
         animalArray.push(cow);
         let sheep = new L10_OldMacDonaldsFarm.Sheep("sheep", "carrots");
         animalArray.push(sheep);
+        let pig = new L10_OldMacDonaldsFarm.Pig("pig", "apples");
+        animalArray.push(pig);
+        let chicken = new L10_OldMacDonaldsFarm.Chicken("chicken", "seeds");
+        animalArray.push(chicken);
+        let dog = new L10_OldMacDonaldsFarm.Dog("dog", "dogfood");
+        animalArray.push(dog);
         for (let animal of animalArray) {
             animal.sing();
             let amount = Math.random() * ((30 - 5) + 5);
