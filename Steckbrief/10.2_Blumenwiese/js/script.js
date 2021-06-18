@@ -77,7 +77,7 @@ var L10_2_Blumenwiese;
             let randomYBee = Math.random() * (window.innerHeight * 0.7);
             let beePosition = new L10_2_Blumenwiese.Vector(randomXBee, randomYBee);
             let velocityBee = new L10_2_Blumenwiese.Vector(-70, 0);
-            let bee = new L10_2_Blumenwiese.Bee(beePosition, velocityBee, 0.4, 0.4);
+            let bee = new L10_2_Blumenwiese.Bee(beePosition, velocityBee);
             bee.draw();
             movableArray.push(bee);
         }

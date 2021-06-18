@@ -1,4 +1,4 @@
-namespace L10_2_Blumenwiese {
+namespace L11_1_Blumenwiese {
     window.addEventListener("load", handleload);
 
     export let canvas: HTMLCanvasElement;
@@ -7,7 +7,6 @@ namespace L10_2_Blumenwiese {
     let horizon: number;
 
     let flowerArray: Flower [] = [];
-    let tulipArray: Tulip [] = [];
 
     let stepArray: number [] = [];
     let heightArray: number [] = [];
@@ -78,12 +77,14 @@ namespace L10_2_Blumenwiese {
 
         drawGrass(horizon, "#3ba356", "#4f8f4f", "#376142");
 
-        for (let i: number = 0; i < tulipArray.length; i++) {
-            tulipArray[i].draw();
-        }
+        
+        for (let flowers of flowerArray) {
+            flowers.draw();
 
-        for (let i: number = 0; i < flowerArray.length; i++) {
-            flowerArray[i].draw();
+            if (flowers.fillHeight < 60) {
+            flowers.fillHeight += 0.7;
+            }
+
         }
 
         for (let movable of movableArray) {
@@ -132,34 +133,34 @@ namespace L10_2_Blumenwiese {
     
             let flowerPosition2: Vector = new Vector (randomXOnGrass, randomYOnGrass);
     
-            let tulip: Tulip = new Tulip (flowerPosition2, "pink", "#355233");
+            let tulip: Tulip = new Tulip (flowerPosition2, "#355233", "pink", 0);
     
             tulip.draw();
 
-            tulipArray.push(tulip);
+            flowerArray.push(tulip);
     
         }
     }
 
     function createFlower(): void {
-        for (let i: number = 0; i < 10; i++){
+        for (let i: number = 0; i < 10; i++) {
             let randomXOnGrass: number = Math.random() * window.innerWidth;
             let randomYOnGrass: number = Math.random() * (window.innerHeight * 0.6 - window.innerHeight) + window.innerHeight;
             let flowerPosition: Vector = new Vector (randomXOnGrass, randomYOnGrass);
 
-            let flowerLeft: Flower = new Flower(flowerPosition, 10, "#355233", "orange", 90);
+            let flowerLeft: Daisy = new Daisy(flowerPosition, "#355233", "orange", 10, 0);
 
             flowerLeft.draw();
 
             flowerArray.push(flowerLeft);
         }
 
-        for (let i: number = 0; i < 10; i++){
+        for (let i: number = 0; i < 10; i++) {
             let randomXOnGrass: number = Math.random() * window.innerWidth;
             let randomYOnGrass: number = Math.random() * (window.innerHeight * 0.6 - window.innerHeight) + window.innerHeight;
             let flowerPosition: Vector = new Vector (randomXOnGrass, randomYOnGrass);
 
-            let flowerRight: Flower = new Flower(flowerPosition, -10, "#355233", "#ffe357", 90);
+            let flowerRight: Daisy = new Daisy(flowerPosition, "#355233", "#ffe357", -10, 0);
 
             flowerRight.draw();
 
@@ -189,14 +190,12 @@ namespace L10_2_Blumenwiese {
         let cloud1Position: Vector = new Vector (randomXClouds1, randomYClouds1);
         let cloud1Position2: Vector = new Vector (randomXClouds2, randomYClouds2);
 
-        let cloudSize: Vector = new Vector (250, 70);
-
         let velocityClouds1: Vector = new Vector (10, 0);
         let velocityClouds2: Vector = new Vector (-20, 0);
 
         for (let i: number = 0; i < 20; i++) {
-            let cloud1: Cloud = new Cloud (cloud1Position, cloudSize, velocityClouds1, xCloudArray[i], yCloudArray[i]);
-            let cloud2: Cloud = new Cloud (cloud1Position2, cloudSize, velocityClouds2, xCloudArray[i], yCloudArray[i]);
+            let cloud1: Cloud = new Cloud (cloud1Position, velocityClouds1, xCloudArray[i], yCloudArray[i]);
+            let cloud2: Cloud = new Cloud (cloud1Position2, velocityClouds2, xCloudArray[i], yCloudArray[i]);
             
             cloud1.draw();
             cloud2.draw();

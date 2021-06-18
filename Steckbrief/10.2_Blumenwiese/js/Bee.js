@@ -2,10 +2,10 @@
 var L10_2_Blumenwiese;
 (function (L10_2_Blumenwiese) {
     class Bee extends L10_2_Blumenwiese.Movable {
-        constructor(_position, _velocity, _scaleX, _scaleY) {
+        constructor(_position, _velocity) {
             super(_position, _velocity);
-            this.scaleX = _scaleX;
-            this.scaleY = _scaleY;
+            this.scaleX = 0.4;
+            this.scaleY = 0.4;
         }
         draw() {
             L10_2_Blumenwiese.crc2.save();

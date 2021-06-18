@@ -1,22 +1,19 @@
-namespace L10_2_Blumenwiese {
+namespace L11_1_Blumenwiese {
 
     export class Cloud extends Movable {
 
-        size: Vector;
-        x: number;
-        y: number;
+        private x: number;
+        private y: number;
 
-        constructor(_position: Vector, _size: Vector, _velocity: Vector, _x: number, _y: number) {
+        constructor(_position: Vector, _velocity: Vector, _x: number, _y: number) {
             super(_position, _velocity);
-
-            this.size = _size;
 
             this.x = _x;
             this.y = _y;
     
         }
 
-        draw(): void {
+        public draw(): void {
 
             let particleNumber: number = 23;
             let particleRadius: number = 50;

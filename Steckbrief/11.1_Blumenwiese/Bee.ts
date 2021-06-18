@@ -1,9 +1,9 @@
-namespace L10_2_Blumenwiese {
+namespace L11_1_Blumenwiese {
 
     export class Bee extends Movable {
 
-        scaleX: number = 0.4;
-        scaleY: number = 0.4;
+        private scaleX: number = 0.4;
+        private scaleY: number = 0.4;
 
         constructor(_position: Vector, _velocity: Vector) {
             super (_position, _velocity);
@@ -11,7 +11,7 @@ namespace L10_2_Blumenwiese {
         }
 
 
-        draw(): void {
+        public draw(): void {
 
             crc2.save();
 

@@ -14,6 +14,7 @@ namespace L10_2_Blumenwiese {
             this.Y *= _factor;
         }
 
+
         add(_added: Vector): void {
             this.X += _added.X;
             this.Y += _added.Y;
