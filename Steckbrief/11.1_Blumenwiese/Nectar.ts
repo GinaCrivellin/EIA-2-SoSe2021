@@ -2,13 +2,13 @@ namespace L11_1_Blumenwiese {
     
     export class Nectar {
 
-    position: Vector;
+    public position: Vector;
 
     constructor(_position: Vector) {
         this.position = _position;
     }
 
-    draw(_fillHeight: number): void {
+    public draw(_fillHeight: number): void {
 
         crc2.save();
 
