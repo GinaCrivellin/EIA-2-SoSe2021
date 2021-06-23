@@ -2,47 +2,25 @@
 var L11_1_Blumenwiese;
 (function (L11_1_Blumenwiese) {
     class Movable {
-        constructor(_position, _velocity) {
+        constructor(_position) {
             this.position = _position;
-            this.velocity = _velocity;
         }
-        move(_timeslice, _movePattern) {
+        //public abstract update(): void;
+        move(_timeslice) {
             let offset = new L11_1_Blumenwiese.Vector(this.velocity.X, this.velocity.Y);
             offset.scale(_timeslice);
             this.position.add(offset);
-            /*
-            let offset2: Vector = new Vector(this.velocity.X, this.velocity.Y);
-
-            offset2 = Vector.getScale(_timeslice);
-            this.position.add(offset2);
-            */
-            if (_movePattern == false) {
-                if (this.position.X < window.innerWidth) {
-                    this.position.X += window.innerWidth;
-                }
-                if (this.position.X > window.innerWidth) {
-                    this.position.X -= window.innerWidth;
-                }
+            if (this.position.X < window.innerWidth) {
+                this.position.X += window.innerWidth;
             }
-            if (_movePattern == true) {
-                if (this.position.X < window.innerWidth) {
-                    this.position.X += window.innerWidth;
-                }
-                if (this.position.X > window.innerWidth) {
-                    this.position.X -= window.innerWidth;
-                }
-                if (this.position.Y < window.innerHeight) {
-                    this.position.Y += window.innerHeight;
-                }
-                if (this.position.Y > window.innerHeight) {
-                    this.position.Y -= window.innerHeight;
-                }
-                if (this.position.X < window.innerWidth / 2) {
-                    this.velocity.Y = 20;
-                }
-                if (this.position.X > window.innerWidth / 2) {
-                    this.velocity.Y = -10;
-                }
+            if (this.position.X > window.innerWidth) {
+                this.position.X -= window.innerWidth;
+            }
+            if (this.position.Y < window.innerHeight) {
+                this.position.Y += window.innerHeight;
+            }
+            if (this.position.Y > window.innerHeight) {
+                this.position.Y -= window.innerHeight;
             }
         }
     }

@@ -6,8 +6,9 @@ namespace L11_1_Blumenwiese {
         private y: number;
 
         constructor(_position: Vector, _velocity: Vector, _x: number, _y: number) {
-            super(_position, _velocity);
+            super(_position);
 
+            this.velocity = _velocity;
             this.x = _x;
             this.y = _y;
     

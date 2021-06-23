@@ -2,8 +2,10 @@
 var L11_1_Blumenwiese;
 (function (L11_1_Blumenwiese) {
     window.addEventListener("load", handleload);
+    window.addEventListener("click", createBee);
     let horizon;
-    let flowerArray = [];
+    L11_1_Blumenwiese.flowerArray = [];
+    L11_1_Blumenwiese.occupiedFlowers = [];
     let stepArray = [];
     let heightArray = [];
     let starArray = [];
@@ -29,7 +31,6 @@ var L11_1_Blumenwiese;
         drawGrass(horizon, "#3ba356", "#4f8f4f", "#376142");
         createTulip();
         createFlower();
-        createBee();
         let cloudSize = new L11_1_Blumenwiese.Vector(250, 70);
         createCloudxy(20, cloudSize);
         createCloud();
@@ -48,7 +49,7 @@ var L11_1_Blumenwiese;
         drawMountians(horizon, window.innerHeight * 0.4, 200, "#414447", "#a3adb5");
         drawMountians(horizon, window.innerHeight * 0.5, 200, "#5b6166", "#b7c1c9");
         drawGrass(horizon, "#3ba356", "#4f8f4f", "#376142");
-        for (let flowers of flowerArray) {
+        for (let flowers of L11_1_Blumenwiese.flowerArray) {
             flowers.draw();
             if (flowers.fillHeight < 60) {
                 flowers.fillHeight += 0.7;
@@ -57,10 +58,10 @@ var L11_1_Blumenwiese;
         for (let movable of movableArray) {
             movable.draw();
             if (movable instanceof L11_1_Blumenwiese.Bee) {
-                movable.move(1 / 10, true);
+                movable.move(1 / 0.2);
             }
             if (movable instanceof L11_1_Blumenwiese.Cloud) {
-                movable.move(1 / 40, false);
+                movable.move(1 / 40);
             }
         }
         drawMoon(window.innerWidth * 0.1, window.innerHeight * 0.1, 30, "rgb(255, 192, 92)", "rgb(255, 215, 105, 0.5)");
@@ -70,17 +71,6 @@ var L11_1_Blumenwiese;
     //
     //
     //
-    function createBee() {
-        for (let i = 0; i < 10; i++) {
-            let randomXBee = Math.random() * (window.innerWidth);
-            let randomYBee = Math.random() * (window.innerHeight * 0.7);
-            let beePosition = new L11_1_Blumenwiese.Vector(randomXBee, randomYBee);
-            let velocityBee = new L11_1_Blumenwiese.Vector(-70, 0);
-            let bee = new L11_1_Blumenwiese.Bee(beePosition, velocityBee);
-            bee.draw();
-            movableArray.push(bee);
-        }
-    }
     function createTulip() {
         for (let i = 0; i < 10; i++) {
             let randomXOnGrass = Math.random() * window.innerWidth;
@@ -88,7 +78,8 @@ var L11_1_Blumenwiese;
             let flowerPosition2 = new L11_1_Blumenwiese.Vector(randomXOnGrass, randomYOnGrass);
             let tulip = new L11_1_Blumenwiese.Tulip(flowerPosition2, "#355233", "pink", 0);
             tulip.draw();
-            flowerArray.push(tulip);
+            L11_1_Blumenwiese.flowerArray.push(tulip);
+            L11_1_Blumenwiese.occupiedFlowers.push(tulip);
         }
     }
     function createFlower() {
@@ -98,7 +89,8 @@ var L11_1_Blumenwiese;
             let flowerPosition = new L11_1_Blumenwiese.Vector(randomXOnGrass, randomYOnGrass);
             let flowerLeft = new L11_1_Blumenwiese.Daisy(flowerPosition, "#355233", "orange", 10, 0);
             flowerLeft.draw();
-            flowerArray.push(flowerLeft);
+            L11_1_Blumenwiese.flowerArray.push(flowerLeft);
+            L11_1_Blumenwiese.occupiedFlowers.push(flowerLeft);
         }
         for (let i = 0; i < 10; i++) {
             let randomXOnGrass = Math.random() * window.innerWidth;
@@ -106,8 +98,17 @@ var L11_1_Blumenwiese;
             let flowerPosition = new L11_1_Blumenwiese.Vector(randomXOnGrass, randomYOnGrass);
             let flowerRight = new L11_1_Blumenwiese.Daisy(flowerPosition, "#355233", "#ffe357", -10, 0);
             flowerRight.draw();
-            flowerArray.push(flowerRight);
+            L11_1_Blumenwiese.flowerArray.push(flowerRight);
+            L11_1_Blumenwiese.occupiedFlowers.push(flowerRight);
         }
+    }
+    function createBee(_event) {
+        let xPos = _event.clientX;
+        let yPos = _event.clientY;
+        let beePosition = new L11_1_Blumenwiese.Vector(xPos, yPos);
+        let bee = new L11_1_Blumenwiese.Bee(beePosition);
+        bee.draw();
+        movableArray.push(bee);
     }
     function createCloudxy(_particleNumber, _size) {
         for (let i = 0; i < _particleNumber; i++) {

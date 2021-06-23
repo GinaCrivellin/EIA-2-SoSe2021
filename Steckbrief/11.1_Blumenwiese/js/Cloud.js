@@ -3,7 +3,8 @@ var L11_1_Blumenwiese;
 (function (L11_1_Blumenwiese) {
     class Cloud extends L11_1_Blumenwiese.Movable {
         constructor(_position, _velocity, _x, _y) {
-            super(_position, _velocity);
+            super(_position);
+            this.velocity = _velocity;
             this.x = _x;
             this.y = _y;
         }

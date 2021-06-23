@@ -1,12 +1,44 @@
 namespace L11_1_Blumenwiese {
 
+    export enum BeeTask {
+        ToFlower,
+        Take,
+        ToBeehive,
+        Give
+    }
+
+    function searchFlower(): Flower {
+
+        let wholeFlower: Flower | null = null;
+
+        for (let i: number = 0; occupiedFlowers[i].fillHeight < 60 && i < occupiedFlowers.length; i++) {
+            wholeFlower = occupiedFlowers[i];
+            occupiedFlowers.splice(i, 1);
+            break;
+        }
+
+        if (wholeFlower === null) {
+            return occupiedFlowers.splice(0, 1)[0];
+
+        }
+        else {
+            return wholeFlower;
+        }
+    }
+
     export class Bee extends Movable {
 
-        private scaleX: number = 0.4;
-        private scaleY: number = 0.4;
+        public task: BeeTask = BeeTask.ToFlower;
+        public flower: Flower;
 
-        constructor(_position: Vector, _velocity: Vector) {
-            super (_position, _velocity);
+        private scaleX: number = 0.4;
+        private scaleY: number = 0.4;  
+
+
+        constructor(_position: Vector) {
+            super (_position);
+            this.velocity = new Vector (0, 0);
+            this.flower = searchFlower();
 
         }
 
@@ -14,6 +46,8 @@ namespace L11_1_Blumenwiese {
         public draw(): void {
 
             crc2.save();
+
+            //crc2.scale(-1, 1);
 
             crc2.beginPath();
             crc2.moveTo(this.position.X, this.position.Y);
@@ -106,6 +140,72 @@ namespace L11_1_Blumenwiese {
             crc2.scale(10, 10);
 
             crc2.restore();
+        }
+
+        public move(_timesclice: number): void {
+
+            super.move(_timesclice);
+
+            switch (this.task) {
+            case BeeTask.ToFlower:
+                    
+                let differenceVelocity: Vector = Vector.getDifference(this.flower.position, this.position);
+                let length: number = differenceVelocity.length();
+        
+                differenceVelocity.scale(1 / length);
+
+                this.velocity = differenceVelocity;
+
+                if (length < 3) {
+                    this.task = BeeTask.Take;
+
+                    this.velocity = new Vector (0, 0);
+
+                    function changeTask(): void {
+                        this.task = BeeTask.ToBeehive;
+                        occupiedFlowers.push(this.flower);
+                        this.flower.fillHeight = 0;
+                    }
+                    window.setTimeout(changeTask.bind(this), 3000);
+                }
+
+                break;
+
+            case BeeTask.Take:
+
+
+                break;
+                
+            case BeeTask.ToBeehive:
+
+                let beehivePosition: Vector = new Vector(window.innerWidth * 0.8, window.innerHeight * 0.8);
+
+                let differenceVelocity2: Vector = Vector.getDifference(beehivePosition, this.position);
+                let length2: number = differenceVelocity2.length();
+            
+                differenceVelocity2.scale(1 / length2);
+
+                this.velocity = differenceVelocity2;
+
+                if (length2 < 3) {
+                    this.task = BeeTask.Give;
+
+                    this.velocity = new Vector (0, 0);
+
+                    setTimeout(changeTask2.bind(this), 3000);
+
+                    function changeTask2(): void {
+                        this.task = BeeTask.ToFlower;
+                        this.flower = searchFlower();
+                    }
+                }
+
+            case BeeTask.Give:
+                
+                break;
+
+        }
+
         }
 
     }

@@ -1,12 +1,15 @@
 namespace L11_1_Blumenwiese {
     window.addEventListener("load", handleload);
 
+    window.addEventListener("click", createBee);
+
     export let canvas: HTMLCanvasElement;
     export let crc2: CanvasRenderingContext2D;
 
     let horizon: number;
 
-    let flowerArray: Flower [] = [];
+    export let flowerArray: Flower [] = [];
+    export let occupiedFlowers: Flower [] = [];
 
     let stepArray: number [] = [];
     let heightArray: number [] = [];
@@ -17,6 +20,8 @@ namespace L11_1_Blumenwiese {
     let yCloudArray: number [] = [];
 
     let movableArray: Movable [] = [];
+
+    
 
 
     function handleload (): void {
@@ -49,8 +54,6 @@ namespace L11_1_Blumenwiese {
         createTulip();
 
         createFlower();
-
-        createBee();
 
         let cloudSize: Vector = new Vector (250, 70);
         createCloudxy(20, cloudSize);
@@ -90,10 +93,10 @@ namespace L11_1_Blumenwiese {
         for (let movable of movableArray) {
             movable.draw();
             if (movable instanceof Bee) {
-            movable.move(1 / 10, true);
+            movable.move(1 / 0.2);
             }
             if (movable instanceof Cloud) {
-            movable.move(1 / 40, false);   
+            movable.move(1 / 40);   
             }
         }
 
@@ -108,23 +111,6 @@ namespace L11_1_Blumenwiese {
     //
     //
 
-    function createBee(): void {
-
-        for (let i: number = 0; i < 10; i++) {
-        let randomXBee: number = Math.random() * (window.innerWidth);
-        let randomYBee: number = Math.random() * (window.innerHeight * 0.7);
-        let beePosition: Vector = new Vector (randomXBee, randomYBee);
-        let velocityBee: Vector = new Vector (-70, 0);
-        let bee: Bee = new Bee(beePosition, velocityBee);
-
-        bee.draw();
-
-        movableArray.push(bee);
-
-        }
-
-    }
-
     function createTulip(): void {
         for (let i: number = 0; i < 10; i++) {
 
@@ -138,6 +124,7 @@ namespace L11_1_Blumenwiese {
             tulip.draw();
 
             flowerArray.push(tulip);
+            occupiedFlowers.push(tulip);
     
         }
     }
@@ -153,6 +140,7 @@ namespace L11_1_Blumenwiese {
             flowerLeft.draw();
 
             flowerArray.push(flowerLeft);
+            occupiedFlowers.push(flowerLeft);
         }
 
         for (let i: number = 0; i < 10; i++) {
@@ -165,7 +153,22 @@ namespace L11_1_Blumenwiese {
             flowerRight.draw();
 
             flowerArray.push(flowerRight);
+            occupiedFlowers.push(flowerRight);
         }
+    }
+
+    function createBee(_event: MouseEvent): void {
+
+        let xPos: number = _event.clientX; 
+        let yPos: number = _event.clientY; 
+        let beePosition: Vector = new Vector (xPos, yPos);
+            
+        let bee: Bee = new Bee(beePosition);
+
+        bee.draw();
+
+        movableArray.push(bee);
+
     }
 
 
@@ -383,4 +386,3 @@ namespace L11_1_Blumenwiese {
         crc2.restore();
     }
 }
-
