@@ -73,8 +73,8 @@ var L11_1_Blumenwiese;
     //
     function createTulip() {
         for (let i = 0; i < 10; i++) {
-            let randomXOnGrass = Math.random() * window.innerWidth;
-            let randomYOnGrass = Math.random() * (window.innerHeight * 0.6 - window.innerHeight) + window.innerHeight;
+            let randomXOnGrass = Math.random() * (window.innerWidth * 0.95 - window.innerWidth * 0.05) + window.innerWidth * 0.05;
+            let randomYOnGrass = Math.random() * (window.innerHeight * 0.6 - window.innerHeight * 0.9) + window.innerHeight * 0.9;
             let flowerPosition2 = new L11_1_Blumenwiese.Vector(randomXOnGrass, randomYOnGrass);
             let tulip = new L11_1_Blumenwiese.Tulip(flowerPosition2, "#355233", "pink", 0);
             tulip.draw();
@@ -84,8 +84,8 @@ var L11_1_Blumenwiese;
     }
     function createFlower() {
         for (let i = 0; i < 10; i++) {
-            let randomXOnGrass = Math.random() * window.innerWidth;
-            let randomYOnGrass = Math.random() * (window.innerHeight * 0.6 - window.innerHeight) + window.innerHeight;
+            let randomXOnGrass = Math.random() * (window.innerWidth * 0.95 - window.innerWidth * 0.05) + window.innerWidth * 0.05;
+            let randomYOnGrass = Math.random() * (window.innerHeight * 0.6 - window.innerHeight * 0.9) + window.innerHeight * 0.9;
             let flowerPosition = new L11_1_Blumenwiese.Vector(randomXOnGrass, randomYOnGrass);
             let flowerLeft = new L11_1_Blumenwiese.Daisy(flowerPosition, "#355233", "orange", 10, 0);
             flowerLeft.draw();
@@ -93,8 +93,8 @@ var L11_1_Blumenwiese;
             L11_1_Blumenwiese.occupiedFlowers.push(flowerLeft);
         }
         for (let i = 0; i < 10; i++) {
-            let randomXOnGrass = Math.random() * window.innerWidth;
-            let randomYOnGrass = Math.random() * (window.innerHeight * 0.6 - window.innerHeight) + window.innerHeight;
+            let randomXOnGrass = Math.random() * (window.innerWidth * 0.95 - window.innerWidth * 0.05) + window.innerWidth * 0.05;
+            let randomYOnGrass = Math.random() * (window.innerHeight * 0.6 - window.innerHeight * 0.9) + window.innerHeight * 0.9;
             let flowerPosition = new L11_1_Blumenwiese.Vector(randomXOnGrass, randomYOnGrass);
             let flowerRight = new L11_1_Blumenwiese.Daisy(flowerPosition, "#355233", "#ffe357", -10, 0);
             flowerRight.draw();

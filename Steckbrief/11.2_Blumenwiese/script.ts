@@ -114,8 +114,8 @@ namespace L11_1_Blumenwiese {
     function createTulip(): void {
         for (let i: number = 0; i < 10; i++) {
 
-            let randomXOnGrass: number = Math.random() * window.innerWidth;
-            let randomYOnGrass: number = Math.random() * (window.innerHeight * 0.6 - window.innerHeight) + window.innerHeight;
+            let randomXOnGrass: number = Math.random() * (window.innerWidth * 0.95 - window.innerWidth * 0.05) + window.innerWidth * 0.05;
+            let randomYOnGrass: number = Math.random() * (window.innerHeight * 0.6 - window.innerHeight * 0.9) + window.innerHeight * 0.9;
     
             let flowerPosition2: Vector = new Vector (randomXOnGrass, randomYOnGrass);
     
@@ -131,8 +131,8 @@ namespace L11_1_Blumenwiese {
 
     function createFlower(): void {
         for (let i: number = 0; i < 10; i++) {
-            let randomXOnGrass: number = Math.random() * window.innerWidth;
-            let randomYOnGrass: number = Math.random() * (window.innerHeight * 0.6 - window.innerHeight) + window.innerHeight;
+            let randomXOnGrass: number = Math.random() * (window.innerWidth * 0.95 - window.innerWidth * 0.05) + window.innerWidth * 0.05;
+            let randomYOnGrass: number = Math.random() * (window.innerHeight * 0.6 - window.innerHeight * 0.9) + window.innerHeight * 0.9;
             let flowerPosition: Vector = new Vector (randomXOnGrass, randomYOnGrass);
 
             let flowerLeft: Daisy = new Daisy(flowerPosition, "#355233", "orange", 10, 0);
@@ -144,8 +144,8 @@ namespace L11_1_Blumenwiese {
         }
 
         for (let i: number = 0; i < 10; i++) {
-            let randomXOnGrass: number = Math.random() * window.innerWidth;
-            let randomYOnGrass: number = Math.random() * (window.innerHeight * 0.6 - window.innerHeight) + window.innerHeight;
+            let randomXOnGrass: number = Math.random() * (window.innerWidth * 0.95 - window.innerWidth * 0.05) + window.innerWidth * 0.05;
+            let randomYOnGrass: number = Math.random() * (window.innerHeight * 0.6 - window.innerHeight * 0.9) + window.innerHeight * 0.9;
             let flowerPosition: Vector = new Vector (randomXOnGrass, randomYOnGrass);
 
             let flowerRight: Daisy = new Daisy(flowerPosition, "#355233", "#ffe357", -10, 0);

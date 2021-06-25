@@ -31,6 +31,11 @@ var L11_1_Blumenwiese;
             this.velocity = new L11_1_Blumenwiese.Vector(0, 0);
             this.flower = searchFlower();
         }
+        changeTask() {
+            this.task = BeeTask.ToBeehive;
+            L11_1_Blumenwiese.occupiedFlowers.push(this.flower);
+            this.flower.fillHeight = 0;
+        }
         draw() {
             L11_1_Blumenwiese.crc2.save();
             //crc2.scale(-1, 1);
@@ -114,12 +119,7 @@ var L11_1_Blumenwiese;
                     if (length < 3) {
                         this.task = BeeTask.Take;
                         this.velocity = new L11_1_Blumenwiese.Vector(0, 0);
-                        function changeTask() {
-                            this.task = BeeTask.ToBeehive;
-                            L11_1_Blumenwiese.occupiedFlowers.push(this.flower);
-                            this.flower.fillHeight = 0;
-                        }
-                        window.setTimeout(changeTask.bind(this), 3000);
+                        window.setTimeout(this.changeTask.bind(this), 3000);
                     }
                     break;
                 case BeeTask.Take:

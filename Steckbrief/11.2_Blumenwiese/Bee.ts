@@ -42,6 +42,12 @@ namespace L11_1_Blumenwiese {
 
         }
 
+        public changeTask(): void {
+            this.task = BeeTask.ToBeehive;
+            occupiedFlowers.push(this.flower);
+            this.flower.fillHeight = 0;
+        }
+
 
         public draw(): void {
 
@@ -161,12 +167,7 @@ namespace L11_1_Blumenwiese {
 
                     this.velocity = new Vector (0, 0);
 
-                    function changeTask(): void {
-                        this.task = BeeTask.ToBeehive;
-                        occupiedFlowers.push(this.flower);
-                        this.flower.fillHeight = 0;
-                    }
-                    window.setTimeout(changeTask.bind(this), 3000);
+                    window.setTimeout(this.changeTask.bind(this), 3000);
                 }
 
                 break;
