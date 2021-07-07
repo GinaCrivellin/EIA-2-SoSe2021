@@ -22,10 +22,6 @@ var Fußball_Simulation;
             let normal = Math.sqrt(this.X * this.X + this.Y * this.Y);
             return normal;
         }
-        normalize() {
-            const length = this.length();
-            return new Vector(this.X / length, this.Y / length);
-        }
     }
     Fußball_Simulation.Vector = Vector;
 })(Fußball_Simulation || (Fußball_Simulation = {}));

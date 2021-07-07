@@ -29,12 +29,5 @@ namespace Fußball_Simulation {
             let normal: number = Math.sqrt(this.X * this.X + this.Y * this.Y);
             return normal;
         }
-
-        public normalize(): Vector {
-            const length: number = this.length();
-            
-            return new Vector(this.X / length, this.Y / length);
-
-        }
     }
 }

@@ -16,10 +16,40 @@
     <title>Document</title>
 </head>
 <body>
+
+    <div id="FormBox">
+
+        <label><p id="PlayerName">Immobile</p></label>
+        <label><p id="PlayerNumber">17</p></label>
+        <form id="formElement" name="Formular" action="" method="get">
+    
+            <fieldset>
+                <legend id="precision">precision</legend>
+                <p>minimal</p>
+                <input type="range" name="PrecisionSliderMin" min="0" max="30" value="10" id="PrecisionSliderMin">
+                <p>maximal</p>
+                <input type="range" name="PrecisionSliderMax" min="30" max="60" value="10" id="PrecisionSliderMax">
+            </fieldset>
+
+            <fieldset>
+                <legend id="pace">pace</legend>
+                <p>minimal</p>
+                <input type="range" name="PaceSlider" min="" max="100" value="20" id="PaceSliderMin">
+                <p>maximal</p>
+                <input type="range" name="PaceSlider" min="" max="100" value="20" id="PaceSliderMax">
+            </fieldset>
+
+            <fieldset>
+                <legend>tricotcolor</legend>
+                <input type="color" name="tricotcolor" value="#0A36AF" id="tricotcolor">
+            </fieldset>
+        
+          </form>
+    </div>
  
     <canvas>
-
         <div id=parentdiv></div>
+
     </canvas>
 
     

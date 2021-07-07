@@ -7,8 +7,6 @@ namespace Fußball_Simulation {
         constructor(_position: Vector, _velocity: Vector, _radius: Vector, _tricotcolor: string) {
             super(_position, _velocity, _radius);
 
-            this.position = _position;
-
             this.tricotcolor = _tricotcolor;
         }
 
@@ -17,7 +15,7 @@ namespace Fußball_Simulation {
 
             crc2.beginPath();
 
-            crc2.arc(this.position.X, this.position.Y, 20, 0, 2 * Math.PI);
+            crc2.arc(this.position.X, this.position.Y, 30, 0, 2 * Math.PI);
             crc2.fillStyle = this.tricotcolor;
             crc2.fill();
 

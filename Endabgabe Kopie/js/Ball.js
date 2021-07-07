@@ -7,17 +7,7 @@ var Fußball_Simulation;
             this.color = _color;
         }
         move(_timeslice) {
-            //console.log("klickPath started");
-            let offset = new Fußball_Simulation.Vector(this.velocity.X, this.velocity.Y);
-            let difference = Fußball_Simulation.Vector.getDifference(this.position, this.velocity);
-            let differenceNumber = difference.length();
-            //while (differenceNumber > 3) {
-            offset.scale(_timeslice);
-            this.position.add(offset);
-            //}
-        }
-        setVelocity(vel) {
-            this.velocity = vel;
+            //
         }
         draw() {
             Fußball_Simulation.crc2.save();
@@ -36,6 +26,16 @@ var Fußball_Simulation;
             Fußball_Simulation.crc2.stroke();
             Fußball_Simulation.crc2.closePath();
             Fußball_Simulation.crc2.restore();
+        }
+        klickPath(_timeslice, _velocity) {
+            console.log("klickPath started");
+            let offset = new Fußball_Simulation.Vector(_velocity.X, _velocity.Y);
+            let difference = Fußball_Simulation.Vector.getDifference(this.position, _velocity);
+            let differenceNumber = difference.length();
+            while (differenceNumber > 3) {
+                offset.scale(_timeslice);
+                this.position.add(offset);
+            }
         }
     }
     Fußball_Simulation.Ball = Ball;

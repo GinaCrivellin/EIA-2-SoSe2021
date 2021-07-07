@@ -11,22 +11,7 @@ namespace Fußball_Simulation {
         }
 
         move(_timeslice: number): void {
-            //console.log("klickPath started");
-            let offset: Vector = new Vector(this.velocity.X, this.velocity.Y);
-
-            let difference: Vector = Vector.getDifference(this.position, this.velocity);
-
-            let differenceNumber: number = difference.length();
-
-            //while (differenceNumber > 3) {
-            offset.scale(_timeslice);
-            this.position.add(offset);
-            //}
-        
-        }
-
-        setVelocity(vel: Vector): void {
-            this.velocity = vel;
+            //
         }
 
         draw(): void {
@@ -55,5 +40,19 @@ namespace Fußball_Simulation {
             crc2.restore();
         }
 
+        klickPath(_timeslice: number, _velocity: Vector): void {
+
+            console.log("klickPath started");
+            let offset: Vector = new Vector(_velocity.X, _velocity.Y);
+
+            let difference: Vector = Vector.getDifference(this.position, _velocity);
+
+            let differenceNumber: number = difference.length();
+
+            while (differenceNumber > 3) {
+            offset.scale(_timeslice);
+            this.position.add(offset);
+            }
+        }
     }
 }
