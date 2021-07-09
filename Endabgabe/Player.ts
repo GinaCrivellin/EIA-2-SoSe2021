@@ -26,11 +26,6 @@ namespace Fußball_Simulation {
             this.number = _number;
             this.precision = _precision;
             this.pace = _pace;
-
-        }
-
-        public changeTask(): void {
-            this.state = PlayerState.GotBall;
         }
 
         changePace(_newPace: number): void {
@@ -96,48 +91,35 @@ namespace Fußball_Simulation {
             */
 
             let checkForRadius: Vector = Vector.getDifference(getBall().position, this.position);
+            const dist: number = checkForRadius.length();
+
+            const detectionRadius: number = 60;
+            const arriveRadius: number = 10;
 
             switch (this.state) {
 
                 case PlayerState.Stop:
-
-                    //console.log("state = Stop");
-                        
                     this.setVelocity(new Vector(0, 0));
-    
-                    if (checkForRadius.length() < 80) {
-                        
-                        //console.log("state = switched to ToBall");
+                    if (dist < detectionRadius) {
                         this.state = PlayerState.ToBall;
-                        
                     }
     
                     break;
     
                 case PlayerState.ToBall:
-
                     checkForRadius = checkForRadius.normalize();
-
                     checkForRadius.scale(this.pace);
-    
-                    //console.log("< 60");
-    
-                    //console.log("Velocity set to ball");
-    
                     this.setVelocity(checkForRadius);
 
-                    if (checkForRadius.length() <= 5) {
-                        
-                        //console.log("state = switched to GoToBall");
-                        window.setTimeout(this.changeTask.bind(this), 5000);
-                        
+                    if (dist <= arriveRadius) {
+                        this.state = PlayerState.GotBall;
                     }
-
-                    else {
+                    else if (dist > detectionRadius) {
+                        this.state = PlayerState.Stop;
+                        stopGame = true;
+                    }
                     break;
-                    }
-                    
-                    
+
                 case PlayerState.GotBall:
                     
                     this.setVelocity(new Vector(0, 0));
@@ -145,7 +127,6 @@ namespace Fußball_Simulation {
                     getBall().setVelocity(new Vector(0, 0));
 
                     break;
-                
             }
         }
     }

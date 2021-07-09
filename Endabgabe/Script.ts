@@ -6,6 +6,8 @@ namespace Fußball_Simulation {
     export let canvas: HTMLCanvasElement;
     export let crc2: CanvasRenderingContext2D;
 
+    export let stopGame: boolean = false;
+
     let canvasWidth: number = window.innerWidth;
     let canvasHeight: number = window.innerHeight;
 
@@ -16,46 +18,7 @@ namespace Fußball_Simulation {
     }
 
     let playerArray: Player[] = [];
-
     let playerToChange: Player[] = [];
-
-    interface InformationSettings {
-
-        name: string;
-        number: number;
-
-        precision: number;
-        pace: number;
-
-        tricotcolor: string;
-    
-    }
-
-    /*
-    interface StartPositions {
-        Stürmer: {
-            links: Vector
-            rechts: Vector
-        };
-        Mittelfeld: {
-            links: Vector;
-            rechts: Vector;
-            mitte: Vector
-            mitteHinten: Vector;
-        };
-        Abwehr: {
-            außenLinks: Vector;
-            außenRechts: Vector;
-            innenLinks: Vector;
-            innenRechts: Vector;
-        };
-        Tor: Vector;
-    }
-    */
-
-    interface StartPositions {
-        [position: string]: Vector;
-    }
 
     var background: HTMLImageElement = new Image();
     background.src = "Assets/field2.jpg";
@@ -89,16 +52,15 @@ namespace Fußball_Simulation {
         createBall();
 
         window.setInterval(update, 20);
-        //window.setInterval(moveBall, 20);
 
         initialize();
     }
 
     function update(): void {
 
-        //console.log("in update");
         //crc2.drawImage(background, window.innerWidth * 0.15, window.innerHeight * 0.07, canvasWidth - 400, canvasHeight - 100); 
 
+        if (stopGame == false) {
         createField(); 
 
         for (let player of playerArray) {
@@ -109,8 +71,14 @@ namespace Fußball_Simulation {
 
         }
 
-        //ballArray[0].draw();
-        //ballArray[0].move(1 / 40);
+        ballArray[0].draw();
+        ballArray[0].move(1 / 40);
+
+        }
+
+        else {
+            return;
+        }
     }
 
     function moveBall(_event: MouseEvent): void {
@@ -320,46 +288,6 @@ namespace Fußball_Simulation {
             }
         ];
 
-        /*
-        const startPositions: StartPositions = {
-            Stürmer: {
-                links: new Vector(window.innerWidth * 0.5, window.innerHeight * 0.2),
-                rechts: new Vector(window.innerWidth * 0.5, window.innerHeight * 0.8)
-            },
-            Mittelfeld: {
-                links: new Vector(window.innerWidth * 0.5, window.innerHeight * 0.2),
-                rechts: new Vector(window.innerWidth * 0.5, window.innerHeight * 0.8),
-                mitte: new Vector(window.innerWidth * 0.5, window.innerHeight * 0.2),
-                mitteHinten: new Vector(window.innerWidth * 0.5, window.innerHeight * 0.8)
-            },
-            Abwehr: {
-                außenLinks: new Vector(window.innerWidth * 0.4, window.innerHeight * 0.3),
-                außenRechts: new Vector(window.innerWidth * 0.5, window.innerHeight * 0.8),
-                innenLinks: new Vector(window.innerWidth * 0.5, window.innerHeight * 0.2),
-                innenRechts: new Vector(window.innerWidth * 0.5, window.innerHeight * 0.8)
-            },
-            Tor: new Vector(window.innerWidth * 0.5, window.innerHeight * 0.2)
-        };
-
-        // keys macht aus "startPositions" ein Array
-        // map geht durch alle Einträge
-
-        //list.map(function(n: number): void { console.log(n); });
-        // ist das Gleiche wie
-        //list.map(n => console.log(n));
-
-        // map macht das gleiche wie 
-        // for (const n of list) {
-            //console.log(n);
-        //}
-
-        Object.keys(startPositions).map(key => {
-            //let playerPosition: Vector = key[0][0];
-            console.log(key[0]);
-            Object.keys(startPositions[key]).map(key =>);
-        });
-        */
-
         let startPositionArrayTeam1: Vector[] = 
         [
             new Vector(window.innerWidth * 0.47, window.innerHeight * 0.3),
@@ -561,17 +489,14 @@ namespace Fußball_Simulation {
     function initialize(): void {
 
         canvas.addEventListener("mousedown", function(evt: MouseEvent): void {
-            //console.log("Klickevent ging!!");
-            // The X and Y coordinates of the mouse, relative to the top left corner
+
             let x: number = evt.clientX;
             let y: number = evt.clientY;
 
             for (let player of playerArray) {
-                // checkClick is a method you'll have to add to the joystick classes. It'll
-                // take in X and Y coordinates and tell if they are within the button.
                 if (player.checkClick(x, y) == true) {
                     console.log(player);
-                    // This is a method you'll have on the joystick classes to handle the click.
+                    
                     showForm(player);
 
                     console.log("! " + player.name + " wurde übergeben");
@@ -602,7 +527,7 @@ namespace Fußball_Simulation {
         let pace: HTMLElement = document.querySelector("#pace")!;
         pace.innerHTML = "pace: " + _player.pace.toString();
         let tricotcolor: HTMLElement = document.querySelector("#tricotcolor")!;
-        tricotcolor.innerHTML = "pace: " + _player.pace.toString();
+        tricotcolor.innerHTML = "tricotcolor: " + _player.tricotcolor.toString();
 
 
         let precisionOfPlayerMin: HTMLInputElement = <HTMLInputElement>document.getElementById("PrecisionSliderMin");
@@ -614,10 +539,10 @@ namespace Fußball_Simulation {
         precisionOfPlayerMax.value = (_player.maxPrecision.toString());
         //precisionOfPlayer?.setAttribute("value", (playerSafe.precision.toString()));
 
-        let paceOfPlayerMin: HTMLInputElement = <HTMLInputElement>document.getElementById("PrecisionSliderMin");
+        let paceOfPlayerMin: HTMLInputElement = <HTMLInputElement>document.getElementById("PaceSliderMin");
         paceOfPlayerMin.value = (_player.minPace.toString());
 
-        let paceOfPlayerMax: HTMLInputElement = <HTMLInputElement>document.getElementById("PrecisionSliderMax");
+        let paceOfPlayerMax: HTMLInputElement = <HTMLInputElement>document.getElementById("PaceSliderMax");
         paceOfPlayerMax.value = (_player.maxPace.toString());
 
         
@@ -639,54 +564,25 @@ namespace Fußball_Simulation {
     }
 
     function formchange(): void {
-        let _player = playerToChange[0];
-
-        let name: HTMLElement = document.querySelector("#PlayerName")!;
-        name.innerHTML = _player.name;
-        let number: HTMLElement = document.querySelector("#PlayerNumber")!;
-        number.innerHTML = _player.number.toString();
-        let precision: HTMLElement = document.querySelector("#precision")!;
-        precision.innerHTML = "precision: " + _player.precision.toString();
-        console.log(_player.precision);
-        console.log("playerMin: " + _player.minPrecision);
-        let pace: HTMLElement = document.querySelector("#pace")!;
-        pace.innerHTML = "pace: " + _player.pace.toString();
-        let tricotcolor: HTMLElement = document.querySelector("#tricotcolor")!;
-        tricotcolor.innerHTML = "pace: " + _player.pace.toString();
-
-        console.log("!!!!! bei Formchange ist " + playerToChange[0].name + " in der Auswahl")
-
-        //console.log("Player:", _player);
-
-        /*
+        console.log("--- Reading new data from form");
         let formData: FormData = new FormData(document.forms[0]);
 
         let player: Player = playerToChange[0];
 
         player.minPrecision = parseInt(formData.get("PrecisionSliderMin")?.toString()!);
-
-        console.log(player.minPrecision);
-
         player.maxPrecision = parseInt(formData.get("PrecisionSliderMax")?.toString()!);
-
-        console.log(player.maxPrecision);
-
         player.precision = Math.round(Math.random() * (player.maxPrecision - player.minPrecision) + player.minPrecision);
-
-        console.log(player.precision);
         
-        let precision: HTMLElement = document.querySelector("#precision")!;
-        precision.innerHTML = "precision: " + player.precision.toString();
+        let precision: HTMLElement = document.getElementById("precision")!;
+        precision.innerHTML = "!!! precision: " + player.precision;
 
         player.minPace = parseInt(formData.get("PaceSliderMin")?.toString()!);
         player.maxPace = parseInt(formData.get("PaceSliderMax")?.toString()!);
-
         player.pace = Math.round(Math.random() * (player.maxPace - player.minPace) + player.minPace);
         
-        let pace: HTMLElement = document.querySelector("#precision")!;
-        pace.innerHTML = "precision: " + player.pace.toString();
+        let pace: HTMLElement = document.getElementById("pace")!;
+        pace.innerHTML = "pace: " + player.pace;
 
         player.tricotcolor = formData.get("tricotcolor")?.toString()!;
-        */
     }
 }

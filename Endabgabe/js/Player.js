@@ -20,9 +20,6 @@ var Fußball_Simulation;
             this.precision = _precision;
             this.pace = _pace;
         }
-        changeTask() {
-            this.state = PlayerState.GotBall;
-        }
         changePace(_newPace) {
             this.pace = _newPace;
         }
@@ -75,28 +72,28 @@ var Fußball_Simulation;
 
             */
             let checkForRadius = Fußball_Simulation.Vector.getDifference(Fußball_Simulation.getBall().position, this.position);
+            const dist = checkForRadius.length();
+            const detectionRadius = 60;
+            const arriveRadius = 10;
             switch (this.state) {
                 case PlayerState.Stop:
-                    //console.log("state = Stop");
                     this.setVelocity(new Fußball_Simulation.Vector(0, 0));
-                    if (checkForRadius.length() < 80) {
-                        //console.log("state = switched to ToBall");
+                    if (dist < detectionRadius) {
                         this.state = PlayerState.ToBall;
                     }
                     break;
                 case PlayerState.ToBall:
                     checkForRadius = checkForRadius.normalize();
                     checkForRadius.scale(this.pace);
-                    //console.log("< 60");
-                    //console.log("Velocity set to ball");
                     this.setVelocity(checkForRadius);
-                    if (checkForRadius.length() <= 5) {
-                        //console.log("state = switched to GoToBall");
-                        window.setTimeout(this.changeTask.bind(this), 5000);
+                    if (dist <= arriveRadius) {
+                        this.state = PlayerState.GotBall;
                     }
-                    else {
-                        break;
+                    else if (dist > detectionRadius) {
+                        this.state = PlayerState.Stop;
+                        Fußball_Simulation.stopGame = true;
                     }
+                    break;
                 case PlayerState.GotBall:
                     this.setVelocity(new Fußball_Simulation.Vector(0, 0));
                     Fußball_Simulation.getBall().setVelocity(new Fußball_Simulation.Vector(0, 0));

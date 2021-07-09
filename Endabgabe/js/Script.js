@@ -3,6 +3,7 @@ var Fußball_Simulation;
 (function (Fußball_Simulation) {
     window.addEventListener("load", handleload);
     window.addEventListener("click", moveBall);
+    Fußball_Simulation.stopGame = false;
     let canvasWidth = window.innerWidth;
     let canvasHeight = window.innerHeight;
     let ballArray = [];
@@ -35,20 +36,23 @@ var Fußball_Simulation;
         createPlayer();
         createBall();
         window.setInterval(update, 20);
-        //window.setInterval(moveBall, 20);
         initialize();
     }
     function update() {
-        //console.log("in update");
         //crc2.drawImage(background, window.innerWidth * 0.15, window.innerHeight * 0.07, canvasWidth - 400, canvasHeight - 100); 
-        createField();
-        for (let player of playerArray) {
-            player.update();
-            player.draw();
-            player.move(1 / 40);
+        if (Fußball_Simulation.stopGame == false) {
+            createField();
+            for (let player of playerArray) {
+                player.update();
+                player.draw();
+                player.move(1 / 40);
+            }
+            ballArray[0].draw();
+            ballArray[0].move(1 / 40);
         }
-        //ballArray[0].draw();
-        //ballArray[0].move(1 / 40);
+        else {
+            return;
+        }
     }
     function moveBall(_event) {
         let xPos = _event.clientX;
@@ -219,45 +223,6 @@ var Fußball_Simulation;
                 playerPrecision: 10
             }
         ];
-        /*
-        const startPositions: StartPositions = {
-            Stürmer: {
-                links: new Vector(window.innerWidth * 0.5, window.innerHeight * 0.2),
-                rechts: new Vector(window.innerWidth * 0.5, window.innerHeight * 0.8)
-            },
-            Mittelfeld: {
-                links: new Vector(window.innerWidth * 0.5, window.innerHeight * 0.2),
-                rechts: new Vector(window.innerWidth * 0.5, window.innerHeight * 0.8),
-                mitte: new Vector(window.innerWidth * 0.5, window.innerHeight * 0.2),
-                mitteHinten: new Vector(window.innerWidth * 0.5, window.innerHeight * 0.8)
-            },
-            Abwehr: {
-                außenLinks: new Vector(window.innerWidth * 0.4, window.innerHeight * 0.3),
-                außenRechts: new Vector(window.innerWidth * 0.5, window.innerHeight * 0.8),
-                innenLinks: new Vector(window.innerWidth * 0.5, window.innerHeight * 0.2),
-                innenRechts: new Vector(window.innerWidth * 0.5, window.innerHeight * 0.8)
-            },
-            Tor: new Vector(window.innerWidth * 0.5, window.innerHeight * 0.2)
-        };
-
-        // keys macht aus "startPositions" ein Array
-        // map geht durch alle Einträge
-
-        //list.map(function(n: number): void { console.log(n); });
-        // ist das Gleiche wie
-        //list.map(n => console.log(n));
-
-        // map macht das gleiche wie
-        // for (const n of list) {
-            //console.log(n);
-        //}
-
-        Object.keys(startPositions).map(key => {
-            //let playerPosition: Vector = key[0][0];
-            console.log(key[0]);
-            Object.keys(startPositions[key]).map(key =>);
-        });
-        */
         let startPositionArrayTeam1 = [
             new Fußball_Simulation.Vector(window.innerWidth * 0.47, window.innerHeight * 0.3),
             new Fußball_Simulation.Vector(window.innerWidth * 0.47, window.innerHeight * 0.7),
@@ -390,16 +355,11 @@ var Fußball_Simulation;
     // Quelle: https://stackoverflow.com/questions/61574962/how-to-add-event-listenerclick-to-a-canvas-object
     function initialize() {
         Fußball_Simulation.canvas.addEventListener("mousedown", function (evt) {
-            //console.log("Klickevent ging!!");
-            // The X and Y coordinates of the mouse, relative to the top left corner
             let x = evt.clientX;
             let y = evt.clientY;
             for (let player of playerArray) {
-                // checkClick is a method you'll have to add to the joystick classes. It'll
-                // take in X and Y coordinates and tell if they are within the button.
                 if (player.checkClick(x, y) == true) {
                     console.log(player);
-                    // This is a method you'll have on the joystick classes to handle the click.
                     showForm(player);
                     console.log("! " + player.name + " wurde übergeben");
                     let form = document.querySelector("#FormBox");
@@ -422,16 +382,16 @@ var Fußball_Simulation;
         let pace = document.querySelector("#pace");
         pace.innerHTML = "pace: " + _player.pace.toString();
         let tricotcolor = document.querySelector("#tricotcolor");
-        tricotcolor.innerHTML = "pace: " + _player.pace.toString();
+        tricotcolor.innerHTML = "tricotcolor: " + _player.tricotcolor.toString();
         let precisionOfPlayerMin = document.getElementById("PrecisionSliderMin");
         precisionOfPlayerMin.value = (_player.minPrecision.toString());
         console.log("playerMin: " + _player.minPrecision);
         let precisionOfPlayerMax = document.getElementById("PrecisionSliderMax");
         precisionOfPlayerMax.value = (_player.maxPrecision.toString());
         //precisionOfPlayer?.setAttribute("value", (playerSafe.precision.toString()));
-        let paceOfPlayerMin = document.getElementById("PrecisionSliderMin");
+        let paceOfPlayerMin = document.getElementById("PaceSliderMin");
         paceOfPlayerMin.value = (_player.minPace.toString());
-        let paceOfPlayerMax = document.getElementById("PrecisionSliderMax");
+        let paceOfPlayerMax = document.getElementById("PaceSliderMax");
         paceOfPlayerMax.value = (_player.maxPace.toString());
         let tricotcolorOfPlayer = document.getElementById("tricotcolor");
         tricotcolorOfPlayer.value = (_player.tricotcolor.toString());
@@ -447,51 +407,20 @@ var Fußball_Simulation;
         }
     }
     function formchange() {
-        let _player = playerToChange[0];
-        let name = document.querySelector("#PlayerName");
-        name.innerHTML = _player.name;
-        let number = document.querySelector("#PlayerNumber");
-        number.innerHTML = _player.number.toString();
-        let precision = document.querySelector("#precision");
-        precision.innerHTML = "precision: " + _player.precision.toString();
-        console.log(_player.precision);
-        console.log("playerMin: " + _player.minPrecision);
-        let pace = document.querySelector("#pace");
-        pace.innerHTML = "pace: " + _player.pace.toString();
-        let tricotcolor = document.querySelector("#tricotcolor");
-        tricotcolor.innerHTML = "pace: " + _player.pace.toString();
-        console.log("!!!!! bei Formchange ist " + playerToChange[0].name + " in der Auswahl");
-        //console.log("Player:", _player);
-        /*
-        let formData: FormData = new FormData(document.forms[0]);
-
-        let player: Player = playerToChange[0];
-
-        player.minPrecision = parseInt(formData.get("PrecisionSliderMin")?.toString()!);
-
-        console.log(player.minPrecision);
-
-        player.maxPrecision = parseInt(formData.get("PrecisionSliderMax")?.toString()!);
-
-        console.log(player.maxPrecision);
-
+        console.log("--- Reading new data from form");
+        let formData = new FormData(document.forms[0]);
+        let player = playerToChange[0];
+        player.minPrecision = parseInt(formData.get("PrecisionSliderMin")?.toString());
+        player.maxPrecision = parseInt(formData.get("PrecisionSliderMax")?.toString());
         player.precision = Math.round(Math.random() * (player.maxPrecision - player.minPrecision) + player.minPrecision);
-
-        console.log(player.precision);
-        
-        let precision: HTMLElement = document.querySelector("#precision")!;
-        precision.innerHTML = "precision: " + player.precision.toString();
-
-        player.minPace = parseInt(formData.get("PaceSliderMin")?.toString()!);
-        player.maxPace = parseInt(formData.get("PaceSliderMax")?.toString()!);
-
+        let precision = document.getElementById("precision");
+        precision.innerHTML = "!!! precision: " + player.precision;
+        player.minPace = parseInt(formData.get("PaceSliderMin")?.toString());
+        player.maxPace = parseInt(formData.get("PaceSliderMax")?.toString());
         player.pace = Math.round(Math.random() * (player.maxPace - player.minPace) + player.minPace);
-        
-        let pace: HTMLElement = document.querySelector("#precision")!;
-        pace.innerHTML = "precision: " + player.pace.toString();
-
-        player.tricotcolor = formData.get("tricotcolor")?.toString()!;
-        */
+        let pace = document.getElementById("pace");
+        pace.innerHTML = "pace: " + player.pace;
+        player.tricotcolor = formData.get("tricotcolor")?.toString();
     }
 })(Fußball_Simulation || (Fußball_Simulation = {}));
 //# sourceMappingURL=Script.js.map
