@@ -11,6 +11,14 @@ var Fußball_Simulation;
         return ballArray[0];
     }
     Fußball_Simulation.getBall = getBall;
+    function pauseGame() {
+        Fußball_Simulation.stopGame = true;
+    }
+    Fußball_Simulation.pauseGame = pauseGame;
+    function resumeGame() {
+        Fußball_Simulation.stopGame = false;
+    }
+    Fußball_Simulation.resumeGame = resumeGame;
     let playerArray = [];
     let playerToChange = [];
     var background = new Image();
@@ -55,6 +63,7 @@ var Fußball_Simulation;
         }
     }
     function moveBall(_event) {
+        Fußball_Simulation.stopGame = false;
         let xPos = _event.clientX;
         let yPos = _event.clientY;
         let mousePosition = new Fußball_Simulation.Vector(xPos, yPos);
@@ -63,6 +72,7 @@ var Fußball_Simulation;
         goTo.scale(50);
         ballArray[0].setVelocity(goTo);
     }
+    Fußball_Simulation.moveBall = moveBall;
     function createPlayer() {
         let playerVelocity = new Fußball_Simulation.Vector(0, 0);
         let playerRadius = new Fußball_Simulation.Vector(30, 30);

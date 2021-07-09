@@ -17,6 +17,14 @@ namespace Fußball_Simulation {
         return ballArray[0];
     }
 
+    export function pauseGame(): void {
+        stopGame = true;
+    }
+
+    export function resumeGame(): void {
+        stopGame = false;
+    }
+
     let playerArray: Player[] = [];
     let playerToChange: Player[] = [];
 
@@ -81,7 +89,10 @@ namespace Fußball_Simulation {
         }
     }
 
-    function moveBall(_event: MouseEvent): void {
+    export function moveBall(_event: MouseEvent): void {
+
+        stopGame = false;
+
         let xPos: number = _event.clientX; 
         let yPos: number = _event.clientY; 
         let mousePosition: Vector = new Vector (xPos, yPos);

@@ -5,7 +5,8 @@ var Fußball_Simulation;
     (function (PlayerState) {
         PlayerState[PlayerState["ToBall"] = 0] = "ToBall";
         PlayerState[PlayerState["GotBall"] = 1] = "GotBall";
-        PlayerState[PlayerState["Stop"] = 2] = "Stop";
+        PlayerState[PlayerState["ShootBall"] = 2] = "ShootBall";
+        PlayerState[PlayerState["Stop"] = 3] = "Stop";
     })(PlayerState = Fußball_Simulation.PlayerState || (Fußball_Simulation.PlayerState = {}));
     class Player extends Fußball_Simulation.Human {
         constructor(_position, _velocity, _radius, _tricotcolor, _name, _number, _precision, _pace) {
@@ -19,6 +20,9 @@ var Fußball_Simulation;
             this.number = _number;
             this.precision = _precision;
             this.pace = _pace;
+        }
+        changeState() {
+            this.state = PlayerState.Stop;
         }
         changePace(_newPace) {
             this.pace = _newPace;
@@ -88,15 +92,23 @@ var Fußball_Simulation;
                     this.setVelocity(checkForRadius);
                     if (dist <= arriveRadius) {
                         this.state = PlayerState.GotBall;
+                        Fußball_Simulation.pauseGame();
                     }
                     else if (dist > detectionRadius) {
                         this.state = PlayerState.Stop;
-                        Fußball_Simulation.stopGame = true;
                     }
                     break;
                 case PlayerState.GotBall:
                     this.setVelocity(new Fußball_Simulation.Vector(0, 0));
                     Fußball_Simulation.getBall().setVelocity(new Fußball_Simulation.Vector(0, 0));
+                    window.addEventListener("click", function tempListener(event) {
+                        Fußball_Simulation.moveBall(event);
+                        Fußball_Simulation.resumeGame();
+                        this.setTimeout(() => {
+                            changeState();
+                        }, 3000);
+                        window.removeEventListener("click", tempListener);
+                    });
                     break;
             }
         }

@@ -3,6 +3,7 @@ namespace Fußball_Simulation {
     export enum PlayerState {
         ToBall,
         GotBall,
+        ShootBall,
         Stop
     }
 
@@ -26,6 +27,10 @@ namespace Fußball_Simulation {
             this.number = _number;
             this.precision = _precision;
             this.pace = _pace;
+        }
+
+        changeState(): void {
+            this.state = PlayerState.Stop;
         }
 
         changePace(_newPace: number): void {
@@ -113,10 +118,10 @@ namespace Fußball_Simulation {
 
                     if (dist <= arriveRadius) {
                         this.state = PlayerState.GotBall;
+                        pauseGame();
                     }
                     else if (dist > detectionRadius) {
                         this.state = PlayerState.Stop;
-                        stopGame = true;
                     }
                     break;
 
@@ -126,7 +131,21 @@ namespace Fußball_Simulation {
 
                     getBall().setVelocity(new Vector(0, 0));
 
+                    window.addEventListener("click", function tempListener(event: MouseEvent): void {
+                        moveBall(event);
+
+                        resumeGame();
+                
+                        this.setTimeout(() => {
+                            changeState();
+                        },              3000);
+                        
+                        window.removeEventListener("click", tempListener);
+                    });
+
                     break;
+
+
             }
         }
     }
