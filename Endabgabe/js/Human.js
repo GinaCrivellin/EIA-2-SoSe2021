@@ -2,15 +2,16 @@
 var Fußball_Simulation;
 (function (Fußball_Simulation) {
     class Human extends Fußball_Simulation.Movable {
-        constructor(_position, _velocity, _radius, _tricotcolor) {
-            super(_position, _velocity, _radius);
+        constructor(_position, _velocity, _tricotcolor) {
+            super(_position, _velocity);
             this.position = _position;
             this.tricotcolor = _tricotcolor;
         }
         draw() {
+            const radius = 20;
             Fußball_Simulation.crc2.save();
             Fußball_Simulation.crc2.beginPath();
-            Fußball_Simulation.crc2.arc(this.position.X, this.position.Y, 20, 0, 2 * Math.PI);
+            Fußball_Simulation.crc2.arc(this.position.X - radius, this.position.Y - radius, radius, 0, 2 * Math.PI);
             Fußball_Simulation.crc2.fillStyle = this.tricotcolor;
             Fußball_Simulation.crc2.fill();
             Fußball_Simulation.crc2.stroke();

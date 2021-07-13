@@ -2,11 +2,11 @@
 var Fußball_Simulation;
 (function (Fußball_Simulation) {
     class LineJudge extends Fußball_Simulation.Human {
-        constructor(_position, _velocity, _radius, _tricotcolor) {
-            super(_position, _velocity, _radius, _tricotcolor);
+        constructor(_position, _velocity, _tricotcolor) {
+            super(_position, _velocity, _tricotcolor);
         }
-        move() {
-            //
+        move(_timeslice) {
+            super.move(_timeslice);
         }
     }
     Fußball_Simulation.LineJudge = LineJudge;

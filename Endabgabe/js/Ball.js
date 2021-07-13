@@ -2,22 +2,18 @@
 var Fußball_Simulation;
 (function (Fußball_Simulation) {
     class Ball extends Fußball_Simulation.Movable {
-        constructor(_position, _velocity, _radius, _color) {
-            super(_position, _velocity, _radius);
+        constructor(_position, _velocity, _color) {
+            super(_position, _velocity);
             this.color = _color;
         }
         move(_timeslice) {
-            //console.log("klickPath started");
             let offset = new Fußball_Simulation.Vector(this.velocity.X, this.velocity.Y);
-            let difference = Fußball_Simulation.Vector.getDifference(this.position, this.velocity);
-            let differenceNumber = difference.length();
-            //while (differenceNumber > 3) {
             offset.scale(_timeslice);
             this.position.add(offset);
-            //}
         }
         setVelocity(vel) {
             this.velocity = vel;
+            console.log("new velocity was set");
         }
         draw() {
             Fußball_Simulation.crc2.save();

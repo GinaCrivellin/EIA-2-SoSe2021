@@ -4,29 +4,22 @@ namespace Fußball_Simulation {
 
         public color: string;
 
-        constructor(_position: Vector, _velocity: Vector, _radius: Vector, _color: string) {
-            super(_position, _velocity, _radius);
+        constructor(_position: Vector, _velocity: Vector, _color: string) {
+            super(_position, _velocity);
 
             this.color = _color;
         }
 
         move(_timeslice: number): void {
-            //console.log("klickPath started");
             let offset: Vector = new Vector(this.velocity.X, this.velocity.Y);
-
-            let difference: Vector = Vector.getDifference(this.position, this.velocity);
-
-            let differenceNumber: number = difference.length();
-
-            //while (differenceNumber > 3) {
+            
             offset.scale(_timeslice);
             this.position.add(offset);
-            //}
-        
         }
 
         setVelocity(vel: Vector): void {
             this.velocity = vel;
+            console.log("new velocity was set");
         }
 
         draw(): void {

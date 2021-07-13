@@ -10,3 +10,8 @@
     position: absolute;
     visibility: hidden;
 }
+
+h1{
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+}

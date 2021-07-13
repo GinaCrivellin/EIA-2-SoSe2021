@@ -1,5 +1,13 @@
 namespace Fußball_Simulation {
 
+    export function toRadians(_deg: number): number {
+        return _deg / 180 * Math.PI;
+    }
+
+    export function randInterval(_a: number, _b: number): number {
+        return Math.random() * (_b - _a) + _a;
+    }
+
     export class Vector {
         public X: number;
         public Y: number;
@@ -14,11 +22,14 @@ namespace Fußball_Simulation {
             return difference;
         }
 
+        public static dot(_a: Vector, _b: Vector): number {
+            return _a.X * _b.X + _a.Y * _b.Y;
+        }
+
         public scale (_factor: number): void {
             this.X *= _factor;
             this.Y *= _factor;
         }
-
 
         public add(_added: Vector): void {
             this.X += _added.X;

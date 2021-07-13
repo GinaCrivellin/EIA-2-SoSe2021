@@ -2,12 +2,12 @@ namespace Fußball_Simulation {
 
     export class LineJudge extends Human {
 
-        constructor(_position: Vector, _velocity: Vector, _radius: Vector, _tricotcolor: string) {
-            super(_position, _velocity, _radius, _tricotcolor);
+        constructor(_position: Vector, _velocity: Vector, _tricotcolor: string) {
+            super(_position, _velocity, _tricotcolor);
         }
 
-        move(): void {
-            //
+        move(_timeslice: number): void {
+            super.move(_timeslice);
         }
     }
 }

@@ -1,15 +1,20 @@
 namespace Fußball_Simulation {
     window.addEventListener("load", handleload);
 
-    window.addEventListener("click", moveBall);
-
     export let canvas: HTMLCanvasElement;
     export let crc2: CanvasRenderingContext2D;
 
-    export let stopGame: boolean = false;
+    export let gameStatus: boolean;
+
+    let scoreTeam1: number = 0;
+    let scoreTeam2: number = 0;
+
 
     let canvasWidth: number = window.innerWidth;
     let canvasHeight: number = window.innerHeight;
+
+    let playerArray: Player[] = [];
+    let playerToChange: Player[] = [];
 
     let ballArray: Ball[] = [];
 
@@ -18,20 +23,48 @@ namespace Fußball_Simulation {
     }
 
     export function pauseGame(): void {
-        stopGame = true;
+        console.log("game was paused");
+        gameStatus = true;
     }
 
     export function resumeGame(): void {
-        stopGame = false;
+        gameStatus = false;
+
+        window.addEventListener("click", firstBallMove);
+        console.log("game was resumed");
     }
 
-    let playerArray: Player[] = [];
-    let playerToChange: Player[] = [];
+    export function formStatusV(): void {
+        let form: HTMLElement = document.querySelector("#FormBox")!;
+        form.style.visibility = "visible";
 
-    var background: HTMLImageElement = new Image();
-    background.src = "Assets/field2.jpg";
+        pauseGame();
+    }
+
+    export function formStatusH(): void {
+        let form: HTMLElement = document.querySelector("#FormBox")!;
+        form.style.visibility = "hidden";
+
+        resumeGame();
+    }
+
+    function resetGame(): void {
+        playerArray = [];
+
+        ballArray = [];
+
+        createPlayer();
+
+        createBall();
+    }
 
     function handleload(): void {
+
+        window.addEventListener("click", firstBallMove);
+
+        formStatusH();
+
+        resumeGame();
 
         let form: HTMLElement = <HTMLElement> document.querySelector("#FormBox");
         form.addEventListener("change", formchange);
@@ -42,16 +75,15 @@ namespace Fußball_Simulation {
         canvas.width = canvasWidth;
         canvas.height = canvasHeight;
 
-        /*
-        // Quelle: https://stackoverflow.com/questions/14012768/html5-canvas-background-image
-        var background: HTMLImageElement = new Image();
-        background.src = "Assets/field2.jpg";
-        background.onload = function(): void {
-            crc2.drawImage(background, window.innerWidth * 0.15, window.innerHeight * 0.065, canvasWidth - 400, canvasHeight - 100);  
-        };
-        */
-
         crc2 = canvas.getContext("2d")!;
+
+        let scoreTeam1: number = 0;
+        let scoreTeam2: number = 0;
+
+        let score: HTMLElement = document.getElementById("score")!;
+        score.innerHTML = "current score: " + scoreTeam1 + " | " + scoreTeam2;
+
+        createBackground();
 
         createField();
 
@@ -68,20 +100,91 @@ namespace Fußball_Simulation {
 
         //crc2.drawImage(background, window.innerWidth * 0.15, window.innerHeight * 0.07, canvasWidth - 400, canvasHeight - 100); 
 
-        if (stopGame == false) {
-        createField(); 
+        if (gameStatus == false) {
+            createBackground();
+            createField(); 
 
-        for (let player of playerArray) {
+            for (let player of playerArray) {
 
-            player.update();
-            player.draw();
-            player.move(1 / 40);
+                player.update();
+                player.draw();
+                player.move(1 / 40);
 
-        }
+            }
 
-        ballArray[0].draw();
-        ballArray[0].move(1 / 40);
+            ballArray[0].draw();
+            ballArray[0].move(1 / 40);
 
+            // Tor links
+            if (ballArray[0].position.X < window.innerWidth * 0.125 && ballArray[0].position.X < window.innerWidth * 0.13 && ballArray[0].position.Y > window.innerHeight * 0.35 && ballArray[0].position.Y < window.innerHeight * 0.65) {
+                resetGame();
+
+                scoreTeam2++;
+
+                let score: HTMLElement = document.getElementById("score")!;
+                score.innerHTML = "current score: " + scoreTeam1 + " | " + scoreTeam2;
+            }
+
+            /*
+
+            // Unten am Tor vorbei
+            if (ballArray[0].position.X < window.innerWidth * 0.125 && ballArray[0].position.Y > window.innerHeight * 0.65) {
+                resetGame();
+
+                console.log("22")
+            }
+
+            // oben am Tor vorbei
+            if (ballArray[0].position.X < window.innerWidth * 0.125 && ballArray[0].position.Y < window.innerHeight * 0.35) {
+                resetGame();
+
+                console.log("33")
+            }
+
+            */
+
+            // Tor rechts
+            if (ballArray[0].position.X > window.innerWidth * 0.870 && ballArray[0].position.X < window.innerWidth * 0.875 && ballArray[0].position.Y > window.innerHeight * 0.35 && ballArray[0].position.Y < window.innerHeight * 0.65) {
+                resetGame();
+
+                scoreTeam1++;
+
+                let score: HTMLElement = document.getElementById("score")!;
+                score.innerHTML = "1 für rechts";
+            }
+
+            /*
+            // Unten am Tor vorbei
+            if (ballArray[0].position.X > window.innerWidth * 0.875 && ballArray[0].position.Y > window.innerHeight * 0.65) {
+                resetGame();
+
+                console.log("55")
+            }
+
+            // oben am Tor vorbei
+            if (ballArray[0].position.X > window.innerWidth * 0.875 && ballArray[0].position.Y < window.innerHeight * 0.35) {
+                resetGame();
+
+                console.log("66")
+            }
+
+            */
+
+            if (ballArray[0].position.X > window.innerWidth * 0.9) {
+                resetGame();
+            }
+
+            if (ballArray[0].position.X < window.innerWidth * 0.1) {
+                resetGame();
+            }
+
+            if (ballArray[0].position.Y > window.innerHeight * 0.9) {
+                resetGame();
+            }
+
+            if (ballArray[0].position.Y < window.innerHeight * 0.1) {
+                resetGame();
+            }
         }
 
         else {
@@ -89,26 +192,23 @@ namespace Fußball_Simulation {
         }
     }
 
-    export function moveBall(_event: MouseEvent): void {
-
-        stopGame = false;
-
-        let xPos: number = _event.clientX; 
-        let yPos: number = _event.clientY; 
-        let mousePosition: Vector = new Vector (xPos, yPos);
-
-        let goTo: Vector = Vector.getDifference(mousePosition, ballArray[0].position);
-
-        goTo = goTo.normalize();
-        goTo.scale(50);
+    export function moveBall(_newDir: Vector): void {
     
-        ballArray[0].setVelocity(goTo);
+        ballArray[0].setVelocity(_newDir);
+    }
+
+    function firstBallMove(_evt: MouseEvent): void {
+        let dir: Vector = Vector.getDifference(new Vector(_evt.x, _evt.y), getBall().position);
+        dir = dir.normalize();
+        dir.scale(50);
+        moveBall(dir);
+
+        window.removeEventListener("click", firstBallMove);
     }
 
     function createPlayer(): void {
 
         let playerVelocity: Vector = new Vector(0, 0);
-        let playerRadius: Vector = new Vector(30, 30);
 
         interface PlayerSkills {
             name: string;
@@ -116,6 +216,7 @@ namespace Fußball_Simulation {
             number: number;
             playerPace: number;
             playerPrecision: number;
+            team: number;
         }
 
         let playerSkills: PlayerSkills[] = [
@@ -125,7 +226,8 @@ namespace Fußball_Simulation {
                 tricotcolor: "#0A36AF",
                 number: 17,
                 playerPace: 10,
-                playerPrecision: 0  
+                playerPrecision: 0,
+                team: 1  
             },
 
             {
@@ -133,7 +235,8 @@ namespace Fußball_Simulation {
                 tricotcolor: "#0A36AF",
                 number: 3,
                 playerPace: 10,
-                playerPrecision: 10  
+                playerPrecision: 10,
+                team: 1    
             },
 
             {
@@ -141,7 +244,8 @@ namespace Fußball_Simulation {
                 tricotcolor: "#0A36AF",
                 number: 21,
                 playerPace: 10,
-                playerPrecision: 10  
+                playerPrecision: 10,
+                team: 1   
             },
 
             {
@@ -149,7 +253,8 @@ namespace Fußball_Simulation {
                 tricotcolor: "#0A36AF",
                 number: 4,
                 playerPace: 10,
-                playerPrecision: 10  
+                playerPrecision: 10,
+                team: 1    
             },
 
             {
@@ -157,7 +262,8 @@ namespace Fußball_Simulation {
                 tricotcolor: "#0A36AF",
                 number: 19,
                 playerPace: 10,
-                playerPrecision: 10  
+                playerPrecision: 10,
+                team: 1    
             },
 
             {
@@ -165,7 +271,8 @@ namespace Fußball_Simulation {
                 tricotcolor: "#0A36AF",
                 number: 2,
                 playerPace: 10,
-                playerPrecision: 10  
+                playerPrecision: 10,
+                team: 1    
             },
 
             {
@@ -173,7 +280,8 @@ namespace Fußball_Simulation {
                 tricotcolor: "#0A36AF",
                 number: 12,
                 playerPace: 10,
-                playerPrecision: 10  
+                playerPrecision: 10,
+                team: 1    
             },
 
             {
@@ -181,7 +289,8 @@ namespace Fußball_Simulation {
                 tricotcolor: "#0A36AF",
                 number: 5,
                 playerPace: 10,
-                playerPrecision: 10  
+                playerPrecision: 10,
+                team: 1    
             },
 
             {
@@ -189,7 +298,8 @@ namespace Fußball_Simulation {
                 tricotcolor: "#0A36AF",
                 number: 18,
                 playerPace: 10,
-                playerPrecision: 10  
+                playerPrecision: 10,
+                team: 1    
             },
 
             {
@@ -197,7 +307,8 @@ namespace Fußball_Simulation {
                 tricotcolor: "#0A36AF",
                 number: 14,
                 playerPace: 10,
-                playerPrecision: 10  
+                playerPrecision: 10,
+                team: 1    
             },
 
             {
@@ -205,7 +316,8 @@ namespace Fußball_Simulation {
                 tricotcolor: "#0A36AF",
                 number: 10,
                 playerPace: 10,
-                playerPrecision: 10  
+                playerPrecision: 10,
+                team: 1    
             },
 
             //
@@ -215,7 +327,8 @@ namespace Fußball_Simulation {
                 tricotcolor: "#f5b342",
                 number: 17,
                 playerPace: 10,
-                playerPrecision: 10  
+                playerPrecision: 10,
+                team: 2   
             },
 
             {
@@ -223,7 +336,8 @@ namespace Fußball_Simulation {
                 tricotcolor: "#f5b342",
                 number: 3,
                 playerPace: 10,
-                playerPrecision: 10  
+                playerPrecision: 10,
+                team: 2    
             },
 
             {
@@ -231,7 +345,8 @@ namespace Fußball_Simulation {
                 tricotcolor: "#f5b342",
                 number: 21,
                 playerPace: 10,
-                playerPrecision: 10  
+                playerPrecision: 10,
+                team: 2    
             },
 
             {
@@ -239,7 +354,8 @@ namespace Fußball_Simulation {
                 tricotcolor: "#f5b342",
                 number: 4,
                 playerPace: 10,
-                playerPrecision: 10  
+                playerPrecision: 10,
+                team: 2  
             },
 
             {
@@ -247,7 +363,8 @@ namespace Fußball_Simulation {
                 tricotcolor: "#f5b342",
                 number: 19,
                 playerPace: 10,
-                playerPrecision: 10  
+                playerPrecision: 10,
+                team: 2   
             },
 
             {
@@ -255,7 +372,8 @@ namespace Fußball_Simulation {
                 tricotcolor: "#f5b342",
                 number: 2,
                 playerPace: 10,
-                playerPrecision: 10  
+                playerPrecision: 10,
+                team: 2    
             },
 
             {
@@ -263,7 +381,8 @@ namespace Fußball_Simulation {
                 tricotcolor: "#f5b342",
                 number: 12,
                 playerPace: 10,
-                playerPrecision: 10  
+                playerPrecision: 10,
+                team: 2   
             },
 
             {
@@ -271,7 +390,8 @@ namespace Fußball_Simulation {
                 tricotcolor: "#f5b342",
                 number: 5,
                 playerPace: 10,
-                playerPrecision: 10  
+                playerPrecision: 10,
+                team: 2   
             },
 
             {
@@ -279,7 +399,8 @@ namespace Fußball_Simulation {
                 tricotcolor: "#f5b342",
                 number: 18,
                 playerPace: 10,
-                playerPrecision: 10  
+                playerPrecision: 10,
+                team: 2   
             },
 
             {
@@ -287,7 +408,8 @@ namespace Fußball_Simulation {
                 tricotcolor: "#f5b342",
                 number: 14,
                 playerPace: 10,
-                playerPrecision: 10  
+                playerPrecision: 10,
+                team: 2   
             },
 
             {
@@ -295,7 +417,8 @@ namespace Fußball_Simulation {
                 tricotcolor: "#f5b342",
                 number: 10,
                 playerPace: 10,
-                playerPrecision: 10  
+                playerPrecision: 10,
+                team: 2   
             }
         ];
 
@@ -339,7 +462,7 @@ namespace Fußball_Simulation {
 
         for (let i: number = 0; i < startPositionArrayTeam1.length; i++) {
 
-            let player: Player = new Player((startPositionArrayTeam1[i]), playerVelocity, playerRadius, playerSkills[i].tricotcolor, playerSkills[i].name, playerSkills[i].number, playerSkills[i].playerPrecision, playerSkills[i].playerPace);
+            let player: Player = new Player((startPositionArrayTeam1[i]), playerVelocity, playerSkills[i].tricotcolor, playerSkills[i].name, playerSkills[i].number, playerSkills[i].playerPrecision, playerSkills[i].playerPace, playerSkills[i].team);
             player.draw();
             //console.log("Player" + i + "is drawn");
             playerArray.push(player);
@@ -347,7 +470,7 @@ namespace Fußball_Simulation {
 
         for (let j: number = 0; j < startPositionArrayTeam2.length; j++) {
 
-            let player: Player = new Player((startPositionArrayTeam2[j]), playerVelocity, playerRadius, playerSkills[j + 11].tricotcolor, playerSkills[j + 11].name, playerSkills[j + 11].number, playerSkills[j + 11].playerPrecision, playerSkills[j + 11].playerPace);
+            let player: Player = new Player((startPositionArrayTeam2[j]), playerVelocity, playerSkills[j + 11].tricotcolor, playerSkills[j + 11].name, playerSkills[j + 11].number, playerSkills[j + 11].playerPrecision, playerSkills[j + 11].playerPace, playerSkills[j + 11].team);
             player.draw();
             //console.log("Player" + j + "is drawn");
             playerArray.push(player);
@@ -359,15 +482,36 @@ namespace Fußball_Simulation {
 
         let ballPosition: Vector = new Vector(window.innerWidth * 0.5, window.innerHeight * 0.5);
         let ballVelocity: Vector = new Vector(0, 0);
-        let ballRadius: Vector = new Vector(10, 10);
         let color: string = "red";
 
-        let ball: Ball = new Ball(ballPosition, ballVelocity, ballRadius, color);
+        let ball: Ball = new Ball(ballPosition, ballVelocity, color);
 
         ball.draw();
 
         ballArray.push(ball);
 
+    }
+
+    function createBackground(): void {
+        
+        crc2.beginPath();
+
+        crc2.save();
+
+        crc2.moveTo(0, 0);
+        crc2.translate(0, 0);
+        crc2.rect(0, 0, window.innerWidth, window.innerHeight);
+
+        crc2.strokeStyle = "white";
+        crc2.lineWidth = 3;
+        crc2.fillStyle = "white";
+        crc2.fill();
+
+        crc2.stroke();
+
+        crc2.restore();
+
+        crc2.closePath();
     }
 
     function createField(): void {
@@ -494,32 +638,35 @@ namespace Fußball_Simulation {
         crc2.restore();
 
         crc2.closePath();
-    }
+    }// ceateField
 
     // Quelle: https://stackoverflow.com/questions/61574962/how-to-add-event-listenerclick-to-a-canvas-object
     function initialize(): void {
 
         canvas.addEventListener("mousedown", function(evt: MouseEvent): void {
 
+            console.log("1111111111111 eventlistener in initialize");
+
             let x: number = evt.clientX;
             let y: number = evt.clientY;
 
+            let playerClicked: Player | null = null;
             for (let player of playerArray) {
                 if (player.checkClick(x, y) == true) {
-                    console.log(player);
-                    
-                    showForm(player);
-
-                    console.log("! " + player.name + " wurde übergeben");
-
-                    let form: HTMLElement = document.querySelector("#FormBox")!;
-                    form.style.visibility = "visible";
-
-
+                    playerClicked = player;
                 }
             }
-        });
-    }
+
+            if (playerClicked) {
+                // A player has been clicked on
+                formStatusV();
+                showForm(playerClicked);
+            }
+            else {
+                formStatusH();
+            }
+        }); // eventlistener
+    }// initilize
 
     function showForm(_player: Player): void {
 
@@ -533,22 +680,41 @@ namespace Fußball_Simulation {
         number.innerHTML = _player.number.toString();
         let precision: HTMLElement = document.querySelector("#precision")!;
         precision.innerHTML = "precision: " + _player.precision.toString();
-        console.log(_player.precision);
-        console.log("playerMin: " + _player.minPrecision);
         let pace: HTMLElement = document.querySelector("#pace")!;
         pace.innerHTML = "pace: " + _player.pace.toString();
         let tricotcolor: HTMLElement = document.querySelector("#tricotcolor")!;
         tricotcolor.innerHTML = "tricotcolor: " + _player.tricotcolor.toString();
 
+        let i: number;
+        let y: number;
+        let j: number;
+        if (_player.team == 1) {
+            i = 0;
+            j = 12;
+            y = 0;
+        }
+
+        else {
+            i = 0;
+            j = 23;
+            y = 10;
+        }
+    
+        while (y < j) {
+            let dropdown: HTMLInputElement = <HTMLInputElement>document.getElementById("player" + i)!;
+            dropdown.value = playerArray[y].name;
+            dropdown.innerHTML = playerArray[y].name;
+            i++;
+            y++;
+        }
+
+
 
         let precisionOfPlayerMin: HTMLInputElement = <HTMLInputElement>document.getElementById("PrecisionSliderMin");
         precisionOfPlayerMin.value = (_player.minPrecision.toString());
 
-        console.log("playerMin: " + _player.minPrecision);
-
         let precisionOfPlayerMax: HTMLInputElement = <HTMLInputElement>document.getElementById("PrecisionSliderMax");
         precisionOfPlayerMax.value = (_player.maxPrecision.toString());
-        //precisionOfPlayer?.setAttribute("value", (playerSafe.precision.toString()));
 
         let paceOfPlayerMin: HTMLInputElement = <HTMLInputElement>document.getElementById("PaceSliderMin");
         paceOfPlayerMin.value = (_player.minPace.toString());
@@ -556,7 +722,6 @@ namespace Fußball_Simulation {
         let paceOfPlayerMax: HTMLInputElement = <HTMLInputElement>document.getElementById("PaceSliderMax");
         paceOfPlayerMax.value = (_player.maxPace.toString());
 
-        
         let tricotcolorOfPlayer: HTMLInputElement = <HTMLInputElement>document.getElementById("tricotcolor");
         tricotcolorOfPlayer.value = (_player.tricotcolor.toString());
 
@@ -564,18 +729,36 @@ namespace Fußball_Simulation {
             if (player.name == _player.name) {
                 playerToChange.push(_player);
 
-                console.log("!!! " + _player + " wurde in das Array gepusht");
+                //console.log("!!! " + _player + " wurde in das Array gepusht");
 
                 if (playerToChange.length > 1) {
                     playerToChange.splice(0, 1);
-                    console.log("!!!! " + playerToChange[0] + " wurde aus dem Array gespliced");
+                    //console.log("!!!! " + playerToChange[0] + " wurde aus dem Array gespliced");
+                }// if
+            }// if
+        }// for
+
+        let dropdown: HTMLElement = document.getElementById("selectPlayer")!;
+
+        dropdown.addEventListener ("change", function (): void {
+
+            console.log("clicked on dropdown?!");
+            
+            for (let player of playerArray) {
+                let i: number = 0;
+                let playerEntry: HTMLElement = document.getElementById("player" + i)!;
+
+                if ( playerEntry?.innerHTML == player.name) {
+                    showForm(player);
                 }
+
+                i++;
             }
-        }
-    }
+        });
+    }// showForm
 
     function formchange(): void {
-        console.log("--- Reading new data from form");
+        //console.log("--- Reading new data from form");
         let formData: FormData = new FormData(document.forms[0]);
 
         let player: Player = playerToChange[0];
@@ -585,7 +768,7 @@ namespace Fußball_Simulation {
         player.precision = Math.round(Math.random() * (player.maxPrecision - player.minPrecision) + player.minPrecision);
         
         let precision: HTMLElement = document.getElementById("precision")!;
-        precision.innerHTML = "!!! precision: " + player.precision;
+        precision.innerHTML = "precision: " + player.precision;
 
         player.minPace = parseInt(formData.get("PaceSliderMin")?.toString()!);
         player.maxPace = parseInt(formData.get("PaceSliderMax")?.toString()!);
@@ -595,5 +778,5 @@ namespace Fußball_Simulation {
         pace.innerHTML = "pace: " + player.pace;
 
         player.tricotcolor = formData.get("tricotcolor")?.toString()!;
-    }
-}
+    }// formchange
+}// namespace
