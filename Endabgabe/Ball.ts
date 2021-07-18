@@ -11,15 +11,10 @@ namespace Fußball_Simulation {
         }
 
         move(_timeslice: number): void {
-            let offset: Vector = new Vector(this.velocity.X, this.velocity.Y);
-            
-            offset.scale(_timeslice);
-            this.position.add(offset);
-        }
+            super.move(_timeslice);
 
-        setVelocity(vel: Vector): void {
-            this.velocity = vel;
-            console.log("new velocity was set");
+            // Apply friction
+            this.velocity.scale(0.99);
         }
 
         draw(): void {
@@ -29,17 +24,15 @@ namespace Fußball_Simulation {
             crc2.beginPath();
 
             crc2.arc(this.position.X, this.position.Y, 15, 0, 2 * Math.PI);
+            //crc2.fillRect(0, 0, 30, 30);
+
             var img: HTMLImageElement = new Image();
             img.src = "Assets/ball.jpg";
             img.onload = function(): void {
-            var pattern: CanvasPattern = crc2.createPattern(img, "repeat")!;
+            var pattern: any = crc2.createPattern(img, "repeat");
             crc2.fillStyle = pattern;
-            crc2.fillRect(0, 0, 30, 30);
+            crc2.fillRect(0, 0, 20, 20);
             };
-
-            //crc2.fillRect(0, 0, 300, 300);
-            //crc2.fillStyle = this.color;
-            //crc2.fill();
 
             crc2.stroke();
 

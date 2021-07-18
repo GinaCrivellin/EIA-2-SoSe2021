@@ -7,28 +7,22 @@ var Fußball_Simulation;
             this.color = _color;
         }
         move(_timeslice) {
-            let offset = new Fußball_Simulation.Vector(this.velocity.X, this.velocity.Y);
-            offset.scale(_timeslice);
-            this.position.add(offset);
-        }
-        setVelocity(vel) {
-            this.velocity = vel;
-            console.log("new velocity was set");
+            super.move(_timeslice);
+            // Apply friction
+            this.velocity.scale(0.99);
         }
         draw() {
             Fußball_Simulation.crc2.save();
             Fußball_Simulation.crc2.beginPath();
             Fußball_Simulation.crc2.arc(this.position.X, this.position.Y, 15, 0, 2 * Math.PI);
+            //crc2.fillRect(0, 0, 30, 30);
             var img = new Image();
             img.src = "Assets/ball.jpg";
             img.onload = function () {
                 var pattern = Fußball_Simulation.crc2.createPattern(img, "repeat");
                 Fußball_Simulation.crc2.fillStyle = pattern;
-                Fußball_Simulation.crc2.fillRect(0, 0, 30, 30);
+                Fußball_Simulation.crc2.fillRect(0, 0, 20, 20);
             };
-            //crc2.fillRect(0, 0, 300, 300);
-            //crc2.fillStyle = this.color;
-            //crc2.fill();
             Fußball_Simulation.crc2.stroke();
             Fußball_Simulation.crc2.closePath();
             Fußball_Simulation.crc2.restore();

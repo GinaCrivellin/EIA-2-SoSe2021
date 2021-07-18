@@ -1,22 +1,24 @@
 namespace Fußball_Simulation {
     window.addEventListener("load", handleload);
 
+    let message: HTMLElement = document.getElementById("message")!;
+
     export let canvas: HTMLCanvasElement;
     export let crc2: CanvasRenderingContext2D;
+    let canvasWidth: number = window.innerWidth;
+    let canvasHeight: number = window.innerHeight;
 
     export let gameStatus: boolean;
 
     let scoreTeam1: number = 0;
     let scoreTeam2: number = 0;
 
-
-    let canvasWidth: number = window.innerWidth;
-    let canvasHeight: number = window.innerHeight;
-
     let playerArray: Player[] = [];
     let playerToChange: Player[] = [];
 
     let ballArray: Ball[] = [];
+    let lineJudgeArray: LineJudge[] = [];
+    let refereeArray: Referee[] = [];
 
     export function getBall(): Ball {
         return ballArray[0];
@@ -56,20 +58,18 @@ namespace Fußball_Simulation {
         createPlayer();
 
         createBall();
+
     }
 
     function handleload(): void {
 
         window.addEventListener("click", firstBallMove);
 
+        // form is not visible + resumeGame = gameStatus = false;
         formStatusH();
+        // adds all eventlistener on formElemnts once
+        formchange();
 
-        resumeGame();
-
-        let form: HTMLElement = <HTMLElement> document.querySelector("#FormBox");
-        form.addEventListener("change", formchange);
-
-        console.log("in handle");
         canvas = document.querySelector("canvas")!;
         canvas.id = "CanvasID";
         canvas.width = canvasWidth;
@@ -77,8 +77,8 @@ namespace Fußball_Simulation {
 
         crc2 = canvas.getContext("2d")!;
 
-        let scoreTeam1: number = 0;
-        let scoreTeam2: number = 0;
+        //let scoreTeam1: number = 0;
+        //let scoreTeam2: number = 0;
 
         let score: HTMLElement = document.getElementById("score")!;
         score.innerHTML = "current score: " + scoreTeam1 + " | " + scoreTeam2;
@@ -91,10 +91,14 @@ namespace Fußball_Simulation {
 
         createBall();
 
+        createLineJudge();
+
+        createReferee();
+
         window.setInterval(update, 20);
 
         initialize();
-    }
+    }// handleLoad
 
     function update(): void {
 
@@ -112,37 +116,53 @@ namespace Fußball_Simulation {
 
             }
 
+            for (let lineJudge of lineJudgeArray) {
+
+                lineJudge.draw();
+                lineJudge.move(1 / 40);
+            }
+
+            refereeArray[0].draw();
+            refereeArray[0].move(1 / 40);
+
             ballArray[0].draw();
-            ballArray[0].move(1 / 40);
+            ballArray[0].move(1 / 30);
 
             // Tor links
             if (ballArray[0].position.X < window.innerWidth * 0.125 && ballArray[0].position.X < window.innerWidth * 0.13 && ballArray[0].position.Y > window.innerHeight * 0.35 && ballArray[0].position.Y < window.innerHeight * 0.65) {
-                resetGame();
 
+                resetGame();
                 scoreTeam2++;
 
                 let score: HTMLElement = document.getElementById("score")!;
                 score.innerHTML = "current score: " + scoreTeam1 + " | " + scoreTeam2;
-            }
+                message.innerHTML = "goaaaaaal!";
 
-            /*
+                setTimeout(() => {
+                    message.innerHTML = "";
+                },         4000);
+            }
 
             // Unten am Tor vorbei
             if (ballArray[0].position.X < window.innerWidth * 0.125 && ballArray[0].position.Y > window.innerHeight * 0.65) {
                 resetGame();
 
-                console.log("22")
-            }
+                message.innerHTML = "so close!";
 
+                setTimeout(() => {
+                    message.innerHTML = "";
+                },         4000);
+            }
             // oben am Tor vorbei
             if (ballArray[0].position.X < window.innerWidth * 0.125 && ballArray[0].position.Y < window.innerHeight * 0.35) {
                 resetGame();
 
-                console.log("33")
+                message.innerHTML = "one more try!";
+
+                setTimeout(() => {
+                    message.innerHTML = "";
+                },         4000);
             }
-
-            */
-
             // Tor rechts
             if (ballArray[0].position.X > window.innerWidth * 0.870 && ballArray[0].position.X < window.innerWidth * 0.875 && ballArray[0].position.Y > window.innerHeight * 0.35 && ballArray[0].position.Y < window.innerHeight * 0.65) {
                 resetGame();
@@ -150,47 +170,52 @@ namespace Fußball_Simulation {
                 scoreTeam1++;
 
                 let score: HTMLElement = document.getElementById("score")!;
-                score.innerHTML = "1 für rechts";
-            }
+                score.innerHTML = "current score: " + scoreTeam1 + " | " + scoreTeam2;
 
-            /*
+                message.innerHTML = "goaaaaaal!";
+
+                setTimeout(() => {
+                    message.innerHTML = "";
+                },         4000);
+            }
             // Unten am Tor vorbei
             if (ballArray[0].position.X > window.innerWidth * 0.875 && ballArray[0].position.Y > window.innerHeight * 0.65) {
                 resetGame();
 
-                console.log("55")
-            }
+                message.innerHTML = "try again!";
 
+                setTimeout(() => {
+                    message.innerHTML = "";
+                },         4000);
+            }
             // oben am Tor vorbei
             if (ballArray[0].position.X > window.innerWidth * 0.875 && ballArray[0].position.Y < window.innerHeight * 0.35) {
                 resetGame();
 
-                console.log("66")
+                message.innerHTML = "next time you got it!";
+
+                setTimeout(() => {
+                    message.innerHTML = "";
+                },         4000);
             }
-
-            */
-
             if (ballArray[0].position.X > window.innerWidth * 0.9) {
                 resetGame();
             }
-
             if (ballArray[0].position.X < window.innerWidth * 0.1) {
                 resetGame();
             }
-
             if (ballArray[0].position.Y > window.innerHeight * 0.9) {
                 resetGame();
             }
-
             if (ballArray[0].position.Y < window.innerHeight * 0.1) {
                 resetGame();
             }
-        }
+        }// if game is resumed / wenn das Spiel läuft
 
         else {
             return;
-        }
-    }
+        }// else
+    }// update
 
     export function moveBall(_newDir: Vector): void {
     
@@ -204,7 +229,7 @@ namespace Fußball_Simulation {
         moveBall(dir);
 
         window.removeEventListener("click", firstBallMove);
-    }
+    } // firstBallMove
 
     function createPlayer(): void {
 
@@ -420,7 +445,7 @@ namespace Fußball_Simulation {
                 playerPrecision: 10,
                 team: 2   
             }
-        ];
+        ]; // PlayerSkills Array
 
         let startPositionArrayTeam1: Vector[] = 
         [
@@ -438,7 +463,7 @@ namespace Fußball_Simulation {
             new Vector(window.innerWidth * 0.25, window.innerHeight * 0.65),
 
             new Vector(window.innerWidth * 0.15, window.innerHeight * 0.5)
-        ];
+        ]; // Team1PositionArray
 
         let startPositionArrayTeam2: Vector[] = 
         [
@@ -456,7 +481,7 @@ namespace Fußball_Simulation {
             new Vector(window.innerWidth * 0.75, window.innerHeight * 0.65),
 
             new Vector(window.innerWidth * 0.85, window.innerHeight * 0.5)
-        ];
+        ]; // Team2PositionArray
 
         //console.log(startPositionArray[0][0]);
 
@@ -464,7 +489,6 @@ namespace Fußball_Simulation {
 
             let player: Player = new Player((startPositionArrayTeam1[i]), playerVelocity, playerSkills[i].tricotcolor, playerSkills[i].name, playerSkills[i].number, playerSkills[i].playerPrecision, playerSkills[i].playerPace, playerSkills[i].team);
             player.draw();
-            //console.log("Player" + i + "is drawn");
             playerArray.push(player);
         }
 
@@ -472,10 +496,241 @@ namespace Fußball_Simulation {
 
             let player: Player = new Player((startPositionArrayTeam2[j]), playerVelocity, playerSkills[j + 11].tricotcolor, playerSkills[j + 11].name, playerSkills[j + 11].number, playerSkills[j + 11].playerPrecision, playerSkills[j + 11].playerPace, playerSkills[j + 11].team);
             player.draw();
-            //console.log("Player" + j + "is drawn");
             playerArray.push(player);
         }
 
+    }// createPlayer
+
+    // Quelle: https://stackoverflow.com/questions/61574962/how-to-add-event-listenerclick-to-a-canvas-object
+    function initialize(): void {
+
+        canvas.addEventListener("mousedown", function(evt: MouseEvent): void {
+
+            let rect: DOMRect = (<HTMLCanvasElement>evt.target).getBoundingClientRect();
+            let x: number = evt.clientX - rect.left;
+            let y: number = evt.clientY - rect.top;
+
+            let playerClicked: Player | null = null;
+            // alle player vom Array werden durchsucht, ob einer "chechClick" erfüllt
+            for (let player of playerArray) {
+                // wenn einer die Vorgabe erfüllt wird dieser der Variable zugeordnet
+                if (player.checkClick(x, y) == true) {
+                    playerClicked = player;
+                }
+            }
+
+            // wenn playerClicked nicht null ist, also ein SPieler gefunden wurde, soll das Form erscheinen
+            if (playerClicked) {
+                formStatusV();
+                showForm(playerClicked);
+            }
+            // sonst soll es hidden bleiben
+            else {
+                formStatusH();
+            }
+        }); // eventlistener
+    }// initilize
+
+    function showForm(_player: Player): void {
+
+        console.log("!! showform wurde gestartet mit " + _player.name);
+
+        //playerArray.splice(playerArray.indexOf(_player, 1));
+
+        let name: HTMLElement = document.querySelector("#PlayerName")!;
+        name.innerHTML = _player.name;
+        let number: HTMLElement = document.querySelector("#PlayerNumber")!;
+        number.innerHTML = _player.number.toString();
+        let precision: HTMLElement = document.querySelector("#precision")!;
+        precision.innerHTML = "precision: " + _player.precision.toString();
+        let pace: HTMLElement = document.querySelector("#pace")!;
+        pace.innerHTML = "pace: " + _player.pace.toString();
+        let tricotcolor: HTMLElement = document.querySelector("#tricotcolor")!;
+        tricotcolor.innerHTML = "tricotcolor: " + _player.tricotcolor.toString();
+
+        let i: number;
+        let y: number;
+        let j: number;
+        if (_player.team == 1) {
+            i = 0;
+            j = 11;
+            y = 0;
+        }
+
+        else {
+            i = 0;
+            j = 22;
+            y = 11;
+        }
+    
+        while (y < j) {
+            let dropdown: HTMLInputElement = <HTMLInputElement>document.getElementById("player" + i)!;
+            dropdown.value = playerArray[y].name;
+            dropdown.innerHTML = playerArray[y].name;
+            i++;
+            y++;
+        }
+
+
+
+        let precisionOfPlayerMin: HTMLInputElement = <HTMLInputElement>document.getElementById("PrecisionSliderMin");
+        precisionOfPlayerMin.value = (_player.minPrecision.toString());
+
+        let precisionOfPlayerMax: HTMLInputElement = <HTMLInputElement>document.getElementById("PrecisionSliderMax");
+        precisionOfPlayerMax.value = (_player.maxPrecision.toString());
+
+        let paceOfPlayerMin: HTMLInputElement = <HTMLInputElement>document.getElementById("PaceSliderMin");
+        paceOfPlayerMin.value = (_player.minPace.toString());
+
+        let paceOfPlayerMax: HTMLInputElement = <HTMLInputElement>document.getElementById("PaceSliderMax");
+        paceOfPlayerMax.value = (_player.maxPace.toString());
+
+        let tricotcolorOfPlayer: HTMLInputElement = <HTMLInputElement>document.getElementById("tricotcolor");
+        tricotcolorOfPlayer.value = (_player.tricotcolor.toString());
+
+        for (let player of playerArray) {
+            if (player.name == _player.name) {
+                playerToChange.push(_player);
+
+                if (playerToChange.length > 1) {
+                    playerToChange.splice(0, 1);
+                }// if
+            }// if
+        }// for
+    }// showForm
+
+    function formchange(): void {
+
+        let precisionMin: HTMLInputElement = <HTMLInputElement>document.getElementById("PrecisionSliderMin");
+        let precisionMax: HTMLInputElement = <HTMLInputElement>document.getElementById("PrecisionSliderMax");
+
+        precisionMin.addEventListener ("change", function (): void {
+            let player: Player = playerToChange[0];
+
+            let newPrecisionMin: number = parseInt(precisionMin.value);
+            player.minPrecision = newPrecisionMin;
+            let newPrecisionMax: number = parseInt(precisionMax.value);
+            player.maxPrecision = newPrecisionMax;
+
+            player.precision = Math.round(randInterval(newPrecisionMin, newPrecisionMax));
+            let precision: HTMLElement = document.getElementById("precision")!;
+            precision.innerHTML = "precision: " + player.precision;
+        });
+
+        precisionMax.addEventListener ("change", function (): void {
+            let player: Player = playerToChange[0];
+
+            let newPrecisionMin: number = parseInt(precisionMin.value);
+            player.minPrecision = newPrecisionMin;
+            let newPrecisionMax: number = parseInt(precisionMax.value);
+            player.maxPrecision = newPrecisionMax;
+
+            player.precision = Math.round(randInterval(newPrecisionMin, newPrecisionMax));
+            let precision: HTMLElement = document.getElementById("precision")!;
+            precision.innerHTML = "precision: " + player.precision;
+        });
+
+        let paceMin: HTMLInputElement = <HTMLInputElement>document.getElementById("PaceSliderMax");
+        let paceMax: HTMLInputElement = <HTMLInputElement>document.getElementById("PaceSliderMax");
+
+        paceMin.addEventListener ("change", function (): void {
+            let player: Player = playerToChange[0];
+            let newPaceMin: number = parseInt(paceMin.value);
+            player.minPace = newPaceMin;
+            let newPaceMax: number = parseInt(paceMax.value);
+            player.maxPace = newPaceMax;
+
+            let newPace: number = Math.round(randInterval(newPaceMin, newPaceMax));
+            player.pace = newPace;
+            let pace: HTMLElement = document.getElementById("pace")!;
+            pace.innerHTML = "pace: " + player.pace;
+
+            // verschnellert den Spieler durch skalierung der velocity
+            player.velocity.scale(newPace);
+        });
+
+        paceMax.addEventListener ("change", function (): void {
+            let player: Player = playerToChange[0];
+            let newPaceMin: number = parseInt(paceMin.value);
+            player.minPace = newPaceMin;
+            let newPaceMax: number = parseInt(paceMax.value);
+            player.maxPace = newPaceMax;
+            
+            let newPace: number = Math.round(randInterval(newPaceMin, newPaceMax));
+            player.pace = Math.round(randInterval(newPaceMin, newPaceMax));
+            let pace: HTMLElement = document.getElementById("pace")!;
+            pace.innerHTML = "pace: " + player.pace;
+
+            player.velocity.scale(newPace);
+        });
+        
+        let tricotcolor: HTMLInputElement = <HTMLInputElement>document.getElementById("tricotcolor")!;
+
+        tricotcolor.addEventListener ("change", function (event: Event): void {
+            let player: Player = playerToChange[0];
+            let color: string = tricotcolor.value;
+            player.tricotcolor = color;
+            player.draw();
+        });
+
+        let dropdown: HTMLElement = document.getElementById("selectPlayer")!;
+        dropdown.addEventListener ("change", function (event: Event): void {
+
+            let player: Player = playerToChange[0];
+            // findet Player aus PlayerArray mit gleichem Namen
+            function findPlayer(name: string): Player | null {
+                for (const player of playerArray) {
+                    if (player.name == name) {
+                        return player;
+                    }
+                }
+                // wenn keiner gefunden wird returnt es null
+                return null;
+            }
+
+            const oldPlayerName: string = player.name;
+            const option: HTMLOptionElement = <HTMLOptionElement>event.target;
+            // option.value = playerName aus dropdown
+            const newPlayerName: string = option.value;
+
+            let oldPlayer: Player = findPlayer(oldPlayerName)!;
+            let newPlayer: Player = findPlayer(newPlayerName)!;
+
+            // positionen werden getauscht
+            const positionChange: Vector = oldPlayer.position;
+            oldPlayer.position = newPlayer.position;
+            newPlayer.position = positionChange;
+
+            // form soll für neuen Player angepasst werden
+            showForm(newPlayer);
+        });
+
+    }// formchange
+
+    function createLineJudge(): void {
+        let lineJudgePosition1: Vector = new Vector (ballArray[0].position.X, window.innerHeight * 0.1);
+        let lineJudgePosition2: Vector = new Vector (ballArray[0].position.X, window.innerHeight * 0.9);
+        let lineJudgeHeight1: number = window.innerHeight * 0.1;
+        let lineJudgeHeight2: number = window.innerHeight * 0.9;
+        let lineJudgeVelocity: Vector = new Vector(0, 0);
+        let lineJudge1: LineJudge = new LineJudge(lineJudgePosition1, lineJudgeVelocity, "Yellow", lineJudgeHeight1);
+        let lineJudge2: LineJudge = new LineJudge(lineJudgePosition2, lineJudgeVelocity, "Yellow", lineJudgeHeight2);
+
+        lineJudge1.draw();
+        lineJudgeArray.push(lineJudge1);
+        lineJudge2.draw();
+        lineJudgeArray.push(lineJudge2);
+    }
+
+    function createReferee(): void {
+
+        let refereePosition: Vector = new Vector(ballArray[0].position.X + 20, window.innerHeight * 0.4);
+        let referee: Referee = new Referee(refereePosition, new Vector(0, 0), "pink");
+
+        referee.draw();
+        referee.move(1 / 40);
+
+        refereeArray.push(referee);
     }
 
     function createBall(): void {
@@ -639,144 +894,4 @@ namespace Fußball_Simulation {
 
         crc2.closePath();
     }// ceateField
-
-    // Quelle: https://stackoverflow.com/questions/61574962/how-to-add-event-listenerclick-to-a-canvas-object
-    function initialize(): void {
-
-        canvas.addEventListener("mousedown", function(evt: MouseEvent): void {
-
-            console.log("1111111111111 eventlistener in initialize");
-
-            let x: number = evt.clientX;
-            let y: number = evt.clientY;
-
-            let playerClicked: Player | null = null;
-            for (let player of playerArray) {
-                if (player.checkClick(x, y) == true) {
-                    playerClicked = player;
-                }
-            }
-
-            if (playerClicked) {
-                // A player has been clicked on
-                formStatusV();
-                showForm(playerClicked);
-            }
-            else {
-                formStatusH();
-            }
-        }); // eventlistener
-    }// initilize
-
-    function showForm(_player: Player): void {
-
-        console.log("!! showform wurde gestartet mit " + _player.name);
-
-        //playerArray.splice(playerArray.indexOf(_player, 1));
-
-        let name: HTMLElement = document.querySelector("#PlayerName")!;
-        name.innerHTML = _player.name;
-        let number: HTMLElement = document.querySelector("#PlayerNumber")!;
-        number.innerHTML = _player.number.toString();
-        let precision: HTMLElement = document.querySelector("#precision")!;
-        precision.innerHTML = "precision: " + _player.precision.toString();
-        let pace: HTMLElement = document.querySelector("#pace")!;
-        pace.innerHTML = "pace: " + _player.pace.toString();
-        let tricotcolor: HTMLElement = document.querySelector("#tricotcolor")!;
-        tricotcolor.innerHTML = "tricotcolor: " + _player.tricotcolor.toString();
-
-        let i: number;
-        let y: number;
-        let j: number;
-        if (_player.team == 1) {
-            i = 0;
-            j = 12;
-            y = 0;
-        }
-
-        else {
-            i = 0;
-            j = 23;
-            y = 10;
-        }
-    
-        while (y < j) {
-            let dropdown: HTMLInputElement = <HTMLInputElement>document.getElementById("player" + i)!;
-            dropdown.value = playerArray[y].name;
-            dropdown.innerHTML = playerArray[y].name;
-            i++;
-            y++;
-        }
-
-
-
-        let precisionOfPlayerMin: HTMLInputElement = <HTMLInputElement>document.getElementById("PrecisionSliderMin");
-        precisionOfPlayerMin.value = (_player.minPrecision.toString());
-
-        let precisionOfPlayerMax: HTMLInputElement = <HTMLInputElement>document.getElementById("PrecisionSliderMax");
-        precisionOfPlayerMax.value = (_player.maxPrecision.toString());
-
-        let paceOfPlayerMin: HTMLInputElement = <HTMLInputElement>document.getElementById("PaceSliderMin");
-        paceOfPlayerMin.value = (_player.minPace.toString());
-
-        let paceOfPlayerMax: HTMLInputElement = <HTMLInputElement>document.getElementById("PaceSliderMax");
-        paceOfPlayerMax.value = (_player.maxPace.toString());
-
-        let tricotcolorOfPlayer: HTMLInputElement = <HTMLInputElement>document.getElementById("tricotcolor");
-        tricotcolorOfPlayer.value = (_player.tricotcolor.toString());
-
-        for (let player of playerArray) {
-            if (player.name == _player.name) {
-                playerToChange.push(_player);
-
-                //console.log("!!! " + _player + " wurde in das Array gepusht");
-
-                if (playerToChange.length > 1) {
-                    playerToChange.splice(0, 1);
-                    //console.log("!!!! " + playerToChange[0] + " wurde aus dem Array gespliced");
-                }// if
-            }// if
-        }// for
-
-        let dropdown: HTMLElement = document.getElementById("selectPlayer")!;
-
-        dropdown.addEventListener ("change", function (): void {
-
-            console.log("clicked on dropdown?!");
-            
-            for (let player of playerArray) {
-                let i: number = 0;
-                let playerEntry: HTMLElement = document.getElementById("player" + i)!;
-
-                if ( playerEntry?.innerHTML == player.name) {
-                    showForm(player);
-                }
-
-                i++;
-            }
-        });
-    }// showForm
-
-    function formchange(): void {
-        //console.log("--- Reading new data from form");
-        let formData: FormData = new FormData(document.forms[0]);
-
-        let player: Player = playerToChange[0];
-
-        player.minPrecision = parseInt(formData.get("PrecisionSliderMin")?.toString()!);
-        player.maxPrecision = parseInt(formData.get("PrecisionSliderMax")?.toString()!);
-        player.precision = Math.round(Math.random() * (player.maxPrecision - player.minPrecision) + player.minPrecision);
-        
-        let precision: HTMLElement = document.getElementById("precision")!;
-        precision.innerHTML = "precision: " + player.precision;
-
-        player.minPace = parseInt(formData.get("PaceSliderMin")?.toString()!);
-        player.maxPace = parseInt(formData.get("PaceSliderMax")?.toString()!);
-        player.pace = Math.round(Math.random() * (player.maxPace - player.minPace) + player.minPace);
-        
-        let pace: HTMLElement = document.getElementById("pace")!;
-        pace.innerHTML = "pace: " + player.pace;
-
-        player.tricotcolor = formData.get("tricotcolor")?.toString()!;
-    }// formchange
 }// namespace

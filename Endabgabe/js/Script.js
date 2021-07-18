@@ -2,13 +2,16 @@
 var Fußball_Simulation;
 (function (Fußball_Simulation) {
     window.addEventListener("load", handleload);
-    let scoreTeam1 = 0;
-    let scoreTeam2 = 0;
+    let message = document.getElementById("message");
     let canvasWidth = window.innerWidth;
     let canvasHeight = window.innerHeight;
+    let scoreTeam1 = 0;
+    let scoreTeam2 = 0;
     let playerArray = [];
     let playerToChange = [];
     let ballArray = [];
+    let lineJudgeArray = [];
+    let refereeArray = [];
     function getBall() {
         return ballArray[0];
     }
@@ -44,27 +47,28 @@ var Fußball_Simulation;
     }
     function handleload() {
         window.addEventListener("click", firstBallMove);
+        // form is not visible + resumeGame = gameStatus = false;
         formStatusH();
-        resumeGame();
-        let form = document.querySelector("#FormBox");
-        form.addEventListener("change", formchange);
-        console.log("in handle");
+        // adds all eventlistener on formElemnts once
+        formchange();
         Fußball_Simulation.canvas = document.querySelector("canvas");
         Fußball_Simulation.canvas.id = "CanvasID";
         Fußball_Simulation.canvas.width = canvasWidth;
         Fußball_Simulation.canvas.height = canvasHeight;
         Fußball_Simulation.crc2 = Fußball_Simulation.canvas.getContext("2d");
-        let scoreTeam1 = 0;
-        let scoreTeam2 = 0;
+        //let scoreTeam1: number = 0;
+        //let scoreTeam2: number = 0;
         let score = document.getElementById("score");
         score.innerHTML = "current score: " + scoreTeam1 + " | " + scoreTeam2;
         createBackground();
         createField();
         createPlayer();
         createBall();
+        createLineJudge();
+        createReferee();
         window.setInterval(update, 20);
         initialize();
-    }
+    } // handleLoad
     function update() {
         //crc2.drawImage(background, window.innerWidth * 0.15, window.innerHeight * 0.07, canvasWidth - 400, canvasHeight - 100); 
         if (Fußball_Simulation.gameStatus == false) {
@@ -75,55 +79,68 @@ var Fußball_Simulation;
                 player.draw();
                 player.move(1 / 40);
             }
+            for (let lineJudge of lineJudgeArray) {
+                lineJudge.draw();
+                lineJudge.move(1 / 40);
+            }
+            refereeArray[0].draw();
+            refereeArray[0].move(1 / 40);
             ballArray[0].draw();
-            ballArray[0].move(1 / 40);
+            ballArray[0].move(1 / 30);
             // Tor links
             if (ballArray[0].position.X < window.innerWidth * 0.125 && ballArray[0].position.X < window.innerWidth * 0.13 && ballArray[0].position.Y > window.innerHeight * 0.35 && ballArray[0].position.Y < window.innerHeight * 0.65) {
                 resetGame();
                 scoreTeam2++;
                 let score = document.getElementById("score");
                 score.innerHTML = "current score: " + scoreTeam1 + " | " + scoreTeam2;
+                message.innerHTML = "goaaaaaal!";
+                setTimeout(() => {
+                    message.innerHTML = "";
+                }, 4000);
             }
-            /*
-
             // Unten am Tor vorbei
             if (ballArray[0].position.X < window.innerWidth * 0.125 && ballArray[0].position.Y > window.innerHeight * 0.65) {
                 resetGame();
-
-                console.log("22")
+                message.innerHTML = "so close!";
+                setTimeout(() => {
+                    message.innerHTML = "";
+                }, 4000);
             }
-
             // oben am Tor vorbei
             if (ballArray[0].position.X < window.innerWidth * 0.125 && ballArray[0].position.Y < window.innerHeight * 0.35) {
                 resetGame();
-
-                console.log("33")
+                message.innerHTML = "one more try!";
+                setTimeout(() => {
+                    message.innerHTML = "";
+                }, 4000);
             }
-
-            */
             // Tor rechts
             if (ballArray[0].position.X > window.innerWidth * 0.870 && ballArray[0].position.X < window.innerWidth * 0.875 && ballArray[0].position.Y > window.innerHeight * 0.35 && ballArray[0].position.Y < window.innerHeight * 0.65) {
                 resetGame();
                 scoreTeam1++;
                 let score = document.getElementById("score");
-                score.innerHTML = "1 für rechts";
+                score.innerHTML = "current score: " + scoreTeam1 + " | " + scoreTeam2;
+                message.innerHTML = "goaaaaaal!";
+                setTimeout(() => {
+                    message.innerHTML = "";
+                }, 4000);
             }
-            /*
             // Unten am Tor vorbei
             if (ballArray[0].position.X > window.innerWidth * 0.875 && ballArray[0].position.Y > window.innerHeight * 0.65) {
                 resetGame();
-
-                console.log("55")
+                message.innerHTML = "try again!";
+                setTimeout(() => {
+                    message.innerHTML = "";
+                }, 4000);
             }
-
             // oben am Tor vorbei
             if (ballArray[0].position.X > window.innerWidth * 0.875 && ballArray[0].position.Y < window.innerHeight * 0.35) {
                 resetGame();
-
-                console.log("66")
+                message.innerHTML = "next time you got it!";
+                setTimeout(() => {
+                    message.innerHTML = "";
+                }, 4000);
             }
-
-            */
             if (ballArray[0].position.X > window.innerWidth * 0.9) {
                 resetGame();
             }
@@ -136,11 +153,11 @@ var Fußball_Simulation;
             if (ballArray[0].position.Y < window.innerHeight * 0.1) {
                 resetGame();
             }
-        }
+        } // if game is resumed / wenn das Spiel läuft
         else {
             return;
-        }
-    }
+        } // else
+    } // update
     function moveBall(_newDir) {
         ballArray[0].setVelocity(_newDir);
     }
@@ -151,7 +168,7 @@ var Fußball_Simulation;
         dir.scale(50);
         moveBall(dir);
         window.removeEventListener("click", firstBallMove);
-    }
+    } // firstBallMove
     function createPlayer() {
         let playerVelocity = new Fußball_Simulation.Vector(0, 0);
         let playerSkills = [
@@ -332,7 +349,7 @@ var Fußball_Simulation;
                 playerPrecision: 10,
                 team: 2
             }
-        ];
+        ]; // PlayerSkills Array
         let startPositionArrayTeam1 = [
             new Fußball_Simulation.Vector(window.innerWidth * 0.47, window.innerHeight * 0.3),
             new Fußball_Simulation.Vector(window.innerWidth * 0.47, window.innerHeight * 0.7),
@@ -345,7 +362,7 @@ var Fußball_Simulation;
             new Fußball_Simulation.Vector(window.innerWidth * 0.25, window.innerHeight * 0.35),
             new Fußball_Simulation.Vector(window.innerWidth * 0.25, window.innerHeight * 0.65),
             new Fußball_Simulation.Vector(window.innerWidth * 0.15, window.innerHeight * 0.5)
-        ];
+        ]; // Team1PositionArray
         let startPositionArrayTeam2 = [
             new Fußball_Simulation.Vector(window.innerWidth * 0.53, window.innerHeight * 0.3),
             new Fußball_Simulation.Vector(window.innerWidth * 0.53, window.innerHeight * 0.7),
@@ -358,20 +375,199 @@ var Fußball_Simulation;
             new Fußball_Simulation.Vector(window.innerWidth * 0.75, window.innerHeight * 0.35),
             new Fußball_Simulation.Vector(window.innerWidth * 0.75, window.innerHeight * 0.65),
             new Fußball_Simulation.Vector(window.innerWidth * 0.85, window.innerHeight * 0.5)
-        ];
+        ]; // Team2PositionArray
         //console.log(startPositionArray[0][0]);
         for (let i = 0; i < startPositionArrayTeam1.length; i++) {
             let player = new Fußball_Simulation.Player((startPositionArrayTeam1[i]), playerVelocity, playerSkills[i].tricotcolor, playerSkills[i].name, playerSkills[i].number, playerSkills[i].playerPrecision, playerSkills[i].playerPace, playerSkills[i].team);
             player.draw();
-            //console.log("Player" + i + "is drawn");
             playerArray.push(player);
         }
         for (let j = 0; j < startPositionArrayTeam2.length; j++) {
             let player = new Fußball_Simulation.Player((startPositionArrayTeam2[j]), playerVelocity, playerSkills[j + 11].tricotcolor, playerSkills[j + 11].name, playerSkills[j + 11].number, playerSkills[j + 11].playerPrecision, playerSkills[j + 11].playerPace, playerSkills[j + 11].team);
             player.draw();
-            //console.log("Player" + j + "is drawn");
             playerArray.push(player);
         }
+    } // createPlayer
+    // Quelle: https://stackoverflow.com/questions/61574962/how-to-add-event-listenerclick-to-a-canvas-object
+    function initialize() {
+        Fußball_Simulation.canvas.addEventListener("mousedown", function (evt) {
+            let rect = evt.target.getBoundingClientRect();
+            let x = evt.clientX - rect.left;
+            let y = evt.clientY - rect.top;
+            let playerClicked = null;
+            // alle player vom Array werden durchsucht, ob einer "chechClick" erfüllt
+            for (let player of playerArray) {
+                // wenn einer die Vorgabe erfüllt wird dieser der Variable zugeordnet
+                if (player.checkClick(x, y) == true) {
+                    playerClicked = player;
+                }
+            }
+            // wenn playerClicked nicht null ist, also ein SPieler gefunden wurde, soll das Form erscheinen
+            if (playerClicked) {
+                formStatusV();
+                showForm(playerClicked);
+            }
+            // sonst soll es hidden bleiben
+            else {
+                formStatusH();
+            }
+        }); // eventlistener
+    } // initilize
+    function showForm(_player) {
+        console.log("!! showform wurde gestartet mit " + _player.name);
+        //playerArray.splice(playerArray.indexOf(_player, 1));
+        let name = document.querySelector("#PlayerName");
+        name.innerHTML = _player.name;
+        let number = document.querySelector("#PlayerNumber");
+        number.innerHTML = _player.number.toString();
+        let precision = document.querySelector("#precision");
+        precision.innerHTML = "precision: " + _player.precision.toString();
+        let pace = document.querySelector("#pace");
+        pace.innerHTML = "pace: " + _player.pace.toString();
+        let tricotcolor = document.querySelector("#tricotcolor");
+        tricotcolor.innerHTML = "tricotcolor: " + _player.tricotcolor.toString();
+        let i;
+        let y;
+        let j;
+        if (_player.team == 1) {
+            i = 0;
+            j = 11;
+            y = 0;
+        }
+        else {
+            i = 0;
+            j = 22;
+            y = 11;
+        }
+        while (y < j) {
+            let dropdown = document.getElementById("player" + i);
+            dropdown.value = playerArray[y].name;
+            dropdown.innerHTML = playerArray[y].name;
+            i++;
+            y++;
+        }
+        let precisionOfPlayerMin = document.getElementById("PrecisionSliderMin");
+        precisionOfPlayerMin.value = (_player.minPrecision.toString());
+        let precisionOfPlayerMax = document.getElementById("PrecisionSliderMax");
+        precisionOfPlayerMax.value = (_player.maxPrecision.toString());
+        let paceOfPlayerMin = document.getElementById("PaceSliderMin");
+        paceOfPlayerMin.value = (_player.minPace.toString());
+        let paceOfPlayerMax = document.getElementById("PaceSliderMax");
+        paceOfPlayerMax.value = (_player.maxPace.toString());
+        let tricotcolorOfPlayer = document.getElementById("tricotcolor");
+        tricotcolorOfPlayer.value = (_player.tricotcolor.toString());
+        for (let player of playerArray) {
+            if (player.name == _player.name) {
+                playerToChange.push(_player);
+                if (playerToChange.length > 1) {
+                    playerToChange.splice(0, 1);
+                } // if
+            } // if
+        } // for
+    } // showForm
+    function formchange() {
+        let precisionMin = document.getElementById("PrecisionSliderMin");
+        let precisionMax = document.getElementById("PrecisionSliderMax");
+        precisionMin.addEventListener("change", function () {
+            let player = playerToChange[0];
+            let newPrecisionMin = parseInt(precisionMin.value);
+            player.minPrecision = newPrecisionMin;
+            let newPrecisionMax = parseInt(precisionMax.value);
+            player.maxPrecision = newPrecisionMax;
+            player.precision = Math.round(Fußball_Simulation.randInterval(newPrecisionMin, newPrecisionMax));
+            let precision = document.getElementById("precision");
+            precision.innerHTML = "precision: " + player.precision;
+        });
+        precisionMax.addEventListener("change", function () {
+            let player = playerToChange[0];
+            let newPrecisionMin = parseInt(precisionMin.value);
+            player.minPrecision = newPrecisionMin;
+            let newPrecisionMax = parseInt(precisionMax.value);
+            player.maxPrecision = newPrecisionMax;
+            player.precision = Math.round(Fußball_Simulation.randInterval(newPrecisionMin, newPrecisionMax));
+            let precision = document.getElementById("precision");
+            precision.innerHTML = "precision: " + player.precision;
+        });
+        let paceMin = document.getElementById("PaceSliderMax");
+        let paceMax = document.getElementById("PaceSliderMax");
+        paceMin.addEventListener("change", function () {
+            let player = playerToChange[0];
+            let newPaceMin = parseInt(paceMin.value);
+            player.minPace = newPaceMin;
+            let newPaceMax = parseInt(paceMax.value);
+            player.maxPace = newPaceMax;
+            let newPace = Math.round(Fußball_Simulation.randInterval(newPaceMin, newPaceMax));
+            player.pace = newPace;
+            let pace = document.getElementById("pace");
+            pace.innerHTML = "pace: " + player.pace;
+            // verschnellert den Spieler durch skalierung der velocity
+            player.velocity.scale(newPace);
+        });
+        paceMax.addEventListener("change", function () {
+            let player = playerToChange[0];
+            let newPaceMin = parseInt(paceMin.value);
+            player.minPace = newPaceMin;
+            let newPaceMax = parseInt(paceMax.value);
+            player.maxPace = newPaceMax;
+            let newPace = Math.round(Fußball_Simulation.randInterval(newPaceMin, newPaceMax));
+            player.pace = Math.round(Fußball_Simulation.randInterval(newPaceMin, newPaceMax));
+            let pace = document.getElementById("pace");
+            pace.innerHTML = "pace: " + player.pace;
+            player.velocity.scale(newPace);
+        });
+        let tricotcolor = document.getElementById("tricotcolor");
+        tricotcolor.addEventListener("change", function (event) {
+            let player = playerToChange[0];
+            let color = tricotcolor.value;
+            player.tricotcolor = color;
+            player.draw();
+        });
+        let dropdown = document.getElementById("selectPlayer");
+        dropdown.addEventListener("change", function (event) {
+            let player = playerToChange[0];
+            // findet Player aus PlayerArray mit gleichem Namen
+            function findPlayer(name) {
+                for (const player of playerArray) {
+                    if (player.name == name) {
+                        return player;
+                    }
+                }
+                // wenn keiner gefunden wird returnt es null
+                return null;
+            }
+            const oldPlayerName = player.name;
+            const option = event.target;
+            // option.value = playerName aus dropdown
+            const newPlayerName = option.value;
+            let oldPlayer = findPlayer(oldPlayerName);
+            let newPlayer = findPlayer(newPlayerName);
+            // positionen werden getauscht
+            const positionChange = oldPlayer.position;
+            oldPlayer.position = newPlayer.position;
+            newPlayer.position = positionChange;
+            // form soll für neuen Player angepasst werden
+            showForm(newPlayer);
+        });
+    } // formchange
+    function createLineJudge() {
+        let lineJudgePosition1 = new Fußball_Simulation.Vector(ballArray[0].position.X, window.innerHeight * 0.1);
+        let lineJudgePosition2 = new Fußball_Simulation.Vector(ballArray[0].position.X, window.innerHeight * 0.9);
+        let lineJudgeHeight1 = window.innerHeight * 0.1;
+        let lineJudgeHeight2 = window.innerHeight * 0.9;
+        let lineJudgeVelocity = new Fußball_Simulation.Vector(0, 0);
+        let lineJudge1 = new Fußball_Simulation.LineJudge(lineJudgePosition1, lineJudgeVelocity, "Yellow", lineJudgeHeight1);
+        let lineJudge2 = new Fußball_Simulation.LineJudge(lineJudgePosition2, lineJudgeVelocity, "Yellow", lineJudgeHeight2);
+        lineJudge1.draw();
+        lineJudgeArray.push(lineJudge1);
+        lineJudge2.draw();
+        lineJudgeArray.push(lineJudge2);
+    }
+    function createReferee() {
+        let refereePosition = new Fußball_Simulation.Vector(ballArray[0].position.X + 20, window.innerHeight * 0.4);
+        let referee = new Fußball_Simulation.Referee(refereePosition, new Fußball_Simulation.Vector(0, 0), "pink");
+        referee.draw();
+        referee.move(1 / 40);
+        refereeArray.push(referee);
     }
     function createBall() {
         let ballPosition = new Fußball_Simulation.Vector(window.innerWidth * 0.5, window.innerHeight * 0.5);
@@ -475,109 +671,5 @@ var Fußball_Simulation;
         Fußball_Simulation.crc2.restore();
         Fußball_Simulation.crc2.closePath();
     } // ceateField
-    // Quelle: https://stackoverflow.com/questions/61574962/how-to-add-event-listenerclick-to-a-canvas-object
-    function initialize() {
-        Fußball_Simulation.canvas.addEventListener("mousedown", function (evt) {
-            console.log("1111111111111 eventlistener in initialize");
-            let x = evt.clientX;
-            let y = evt.clientY;
-            let playerClicked = null;
-            for (let player of playerArray) {
-                if (player.checkClick(x, y) == true) {
-                    playerClicked = player;
-                }
-            }
-            if (playerClicked) {
-                // A player has been clicked on
-                formStatusV();
-                showForm(playerClicked);
-            }
-            else {
-                formStatusH();
-            }
-        }); // eventlistener
-    } // initilize
-    function showForm(_player) {
-        console.log("!! showform wurde gestartet mit " + _player.name);
-        //playerArray.splice(playerArray.indexOf(_player, 1));
-        let name = document.querySelector("#PlayerName");
-        name.innerHTML = _player.name;
-        let number = document.querySelector("#PlayerNumber");
-        number.innerHTML = _player.number.toString();
-        let precision = document.querySelector("#precision");
-        precision.innerHTML = "precision: " + _player.precision.toString();
-        let pace = document.querySelector("#pace");
-        pace.innerHTML = "pace: " + _player.pace.toString();
-        let tricotcolor = document.querySelector("#tricotcolor");
-        tricotcolor.innerHTML = "tricotcolor: " + _player.tricotcolor.toString();
-        let i;
-        let y;
-        let j;
-        if (_player.team == 1) {
-            i = 0;
-            j = 12;
-            y = 0;
-        }
-        else {
-            i = 0;
-            j = 23;
-            y = 10;
-        }
-        while (y < j) {
-            let dropdown = document.getElementById("player" + i);
-            dropdown.value = playerArray[y].name;
-            dropdown.innerHTML = playerArray[y].name;
-            i++;
-            y++;
-        }
-        let precisionOfPlayerMin = document.getElementById("PrecisionSliderMin");
-        precisionOfPlayerMin.value = (_player.minPrecision.toString());
-        let precisionOfPlayerMax = document.getElementById("PrecisionSliderMax");
-        precisionOfPlayerMax.value = (_player.maxPrecision.toString());
-        let paceOfPlayerMin = document.getElementById("PaceSliderMin");
-        paceOfPlayerMin.value = (_player.minPace.toString());
-        let paceOfPlayerMax = document.getElementById("PaceSliderMax");
-        paceOfPlayerMax.value = (_player.maxPace.toString());
-        let tricotcolorOfPlayer = document.getElementById("tricotcolor");
-        tricotcolorOfPlayer.value = (_player.tricotcolor.toString());
-        for (let player of playerArray) {
-            if (player.name == _player.name) {
-                playerToChange.push(_player);
-                //console.log("!!! " + _player + " wurde in das Array gepusht");
-                if (playerToChange.length > 1) {
-                    playerToChange.splice(0, 1);
-                    //console.log("!!!! " + playerToChange[0] + " wurde aus dem Array gespliced");
-                } // if
-            } // if
-        } // for
-        let dropdown = document.getElementById("selectPlayer");
-        dropdown.addEventListener("change", function () {
-            console.log("clicked on dropdown?!");
-            for (let player of playerArray) {
-                let i = 0;
-                let playerEntry = document.getElementById("player" + i);
-                if (playerEntry?.innerHTML == player.name) {
-                    showForm(player);
-                }
-                i++;
-            }
-        });
-    } // showForm
-    function formchange() {
-        //console.log("--- Reading new data from form");
-        let formData = new FormData(document.forms[0]);
-        let player = playerToChange[0];
-        player.minPrecision = parseInt(formData.get("PrecisionSliderMin")?.toString());
-        player.maxPrecision = parseInt(formData.get("PrecisionSliderMax")?.toString());
-        player.precision = Math.round(Math.random() * (player.maxPrecision - player.minPrecision) + player.minPrecision);
-        let precision = document.getElementById("precision");
-        precision.innerHTML = "precision: " + player.precision;
-        player.minPace = parseInt(formData.get("PaceSliderMin")?.toString());
-        player.maxPace = parseInt(formData.get("PaceSliderMax")?.toString());
-        player.pace = Math.round(Math.random() * (player.maxPace - player.minPace) + player.minPace);
-        let pace = document.getElementById("pace");
-        pace.innerHTML = "pace: " + player.pace;
-        player.tricotcolor = formData.get("tricotcolor")?.toString();
-    } // formchange
 })(Fußball_Simulation || (Fußball_Simulation = {})); // namespace
 //# sourceMappingURL=Script.js.map

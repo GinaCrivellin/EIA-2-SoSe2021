@@ -15,3 +15,9 @@ h1{
     font-family: 'Courier New', Courier, monospace;
     text-align: center;
 }
+
+p{
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+    font-size: small;
+}

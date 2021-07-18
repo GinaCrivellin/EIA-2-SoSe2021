@@ -11,47 +11,26 @@ var Fußball_Simulation;
     class Player extends Fußball_Simulation.Human {
         constructor(_position, _velocity, _tricotcolor, _name, _number, _precision, _pace, _team) {
             super(_position, _velocity, _tricotcolor);
-            this.state = PlayerState.Stop;
             this.minPace = 0;
             this.maxPace = 0;
             this.minPrecision = 0;
             this.maxPrecision = 0;
+            this.state = PlayerState.Stop;
+            this.startPos = _position;
             this.name = _name;
             this.number = _number;
             this.precision = _precision;
             this.pace = _pace;
             this.team = _team;
         }
-        changeState() {
-            this.state = PlayerState.Stop;
-            console.log("!state was changed!");
-        }
-        changePace(_newPace) {
-            this.pace = _newPace;
-        }
-        changePrecision(_newPrecision) {
-            this.precision = _newPrecision;
-        }
-        setVelocity(vel) {
-            this.velocity = vel;
-        }
-        draw() {
-            super.draw();
-        }
-        move(_timeslice) {
-            super.move(_timeslice);
-        }
         checkClick(_x, _y) {
-            console.log("1111111 in checkklick");
             let eventData = new Fußball_Simulation.Vector(_x, _y);
             let difference = Fußball_Simulation.Vector.getDifference(this.position, eventData);
             let length = difference.length();
-            if (length < 20) {
-                console.log("1111111 player checkclick is true");
+            if (length < 40) {
                 return true;
             }
             else {
-                console.log("1111111 player checkclick is false");
                 return false;
             }
         }
@@ -62,7 +41,15 @@ var Fußball_Simulation;
             const arriveRadius = 10;
             switch (this.state) {
                 case PlayerState.Stop:
-                    this.setVelocity(new Fußball_Simulation.Vector(0, 0));
+                    let difference = Fußball_Simulation.Vector.getDifference(this.startPos, this.position);
+                    if (difference.X === 0 && difference.Y === 0) {
+                        this.velocity = new Fußball_Simulation.Vector(0, 0);
+                    }
+                    else {
+                        let norm = difference.normalize();
+                        norm.scale(this.pace);
+                        this.velocity = norm;
+                    }
                     if (dist < detectionRadius) {
                         this.state = PlayerState.ToBall;
                     }
@@ -73,16 +60,24 @@ var Fußball_Simulation;
                     this.setVelocity(checkForRadius);
                     if (dist <= arriveRadius) {
                         this.changeStateToGotBall();
-                        console.log("!playerState was changed to GotBall!");
                     }
                     else if (dist > detectionRadius) {
                         this.state = PlayerState.Stop;
                     }
                     break;
                 case PlayerState.GotBall:
-                    console.log("!playerState is in GotBall!");
                     break;
             }
+        }
+        changePace(_newPace) {
+            this.pace = _newPace;
+        }
+        changePrecision(_newPrecision) {
+            this.precision = _newPrecision;
+        }
+        changeState() {
+            this.state = PlayerState.Stop;
+            console.log("!state was changed!");
         }
         changeStateToGotBall() {
             Fußball_Simulation.pauseGame();
@@ -90,9 +85,9 @@ var Fußball_Simulation;
             Fußball_Simulation.getBall().setVelocity(new Fußball_Simulation.Vector(0, 0));
             let self = this;
             window.addEventListener("click", function tempListener(_event) {
-                console.log("!eventlistener was clicked");
-                let xPos = _event.clientX;
-                let yPos = _event.clientY;
+                let rect = _event.target.getBoundingClientRect();
+                let xPos = _event.clientX - rect.left;
+                let yPos = _event.clientY - rect.top;
                 let mousePosition = new Fußball_Simulation.Vector(xPos, yPos);
                 let goTo = Fußball_Simulation.Vector.getDifference(mousePosition, Fußball_Simulation.getBall().position);
                 goTo = goTo.normalize();
@@ -103,11 +98,9 @@ var Fußball_Simulation;
                 let b = new Fußball_Simulation.Vector(Math.sin(angle), Math.cos(angle)); // second row of matrix
                 goTo = new Fußball_Simulation.Vector(Fußball_Simulation.Vector.dot(a, goTo), Fußball_Simulation.Vector.dot(b, goTo));
                 goTo.scale(50);
-                console.log("als gescalter Vecktor ist das: " + goTo);
                 Fußball_Simulation.moveBall(goTo);
                 Fußball_Simulation.resumeGame();
                 setTimeout(() => {
-                    console.log("!timeout was set!");
                     self.changeState();
                 }, 3000);
                 window.removeEventListener("click", tempListener);

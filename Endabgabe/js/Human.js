@@ -11,17 +11,12 @@ var Fußball_Simulation;
             const radius = 20;
             Fußball_Simulation.crc2.save();
             Fußball_Simulation.crc2.beginPath();
-            Fußball_Simulation.crc2.arc(this.position.X - radius, this.position.Y - radius, radius, 0, 2 * Math.PI);
+            Fußball_Simulation.crc2.arc(this.position.X, this.position.Y, radius, 0, 2 * Math.PI);
             Fußball_Simulation.crc2.fillStyle = this.tricotcolor;
             Fußball_Simulation.crc2.fill();
             Fußball_Simulation.crc2.stroke();
             Fußball_Simulation.crc2.closePath();
             Fußball_Simulation.crc2.restore();
-        }
-        move(_timeslice) {
-            let offset = new Fußball_Simulation.Vector(this.velocity.X, this.velocity.Y);
-            offset.scale(_timeslice);
-            this.position.add(offset);
         }
     }
     Fußball_Simulation.Human = Human;

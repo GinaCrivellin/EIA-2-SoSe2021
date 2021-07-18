@@ -11,7 +11,17 @@ namespace Fußball_Simulation {
 
         abstract draw(): void;
 
-        abstract move(_timeslice: number): void;
+        public move(_timeslice: number): void {
+            let offset: Vector = new Vector(this.velocity.X, this.velocity.Y);
+                
+            offset.scale(_timeslice);
+            this.position.add(offset);
+        }
+
+        public setVelocity(vel: Vector): void {
+            this.velocity = vel;
+            console.log("new velocity was set");
+        }
 
 
     }

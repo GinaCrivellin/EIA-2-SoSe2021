@@ -9,8 +9,6 @@ namespace Fußball_Simulation {
 
     export class Player extends Human {
 
-        public state: PlayerState = PlayerState.Stop;
-
         public name: string;
         public number: number;
         public precision: number;
@@ -22,8 +20,12 @@ namespace Fußball_Simulation {
         public minPrecision: number = 0;
         public maxPrecision: number = 0;
 
+        private startPos: Vector;
+        private state: PlayerState = PlayerState.Stop;
+
         constructor(_position: Vector, _velocity: Vector, _tricotcolor: string, _name: string, _number: number, _precision: number, _pace: number, _team: number) {
             super(_position, _velocity, _tricotcolor);
+            this.startPos = _position;
             this.name = _name;
             this.number = _number;
             this.precision = _precision;
@@ -31,52 +33,22 @@ namespace Fußball_Simulation {
             this.team = _team;
         }
 
-        changeState(): void {
-            this.state = PlayerState.Stop;
-            console.log("!state was changed!");
-        }
-
-        changePace(_newPace: number): void {
-            this.pace = _newPace;
-        }
-
-        changePrecision(_newPrecision: number): void {
-            this.precision = _newPrecision;
-        }
-
-        setVelocity(vel: Vector): void {
-            this.velocity = vel;
-        }
-
-        draw(): void {
-            super.draw();
-        }
-
-        public move(_timeslice: number): void {
-            super.move(_timeslice);
-        }
-
-        checkClick(_x: number, _y: number): boolean {
-
-            console.log("1111111 in checkklick");
+        public checkClick(_x: number, _y: number): boolean {
             let eventData: Vector = new Vector(_x, _y);
 
             let difference: Vector = Vector.getDifference(this.position, eventData);
             
             let length: number = difference.length();
 
-            if (length < 20) {
-                console.log("1111111 player checkclick is true");
+            if (length < 40) {
                 return true;
             }
-
             else {
-                console.log("1111111 player checkclick is false");
                 return false;
             }
         }
 
-        update(): void {
+        public update(): void {
 
             let checkForRadius: Vector = Vector.getDifference(getBall().position, this.position);
             const dist: number = checkForRadius.length();
@@ -87,7 +59,20 @@ namespace Fußball_Simulation {
             switch (this.state) {
 
                 case PlayerState.Stop:
-                    this.setVelocity(new Vector(0, 0));
+                    let difference: Vector = Vector.getDifference(this.startPos, this.position);
+
+                    if (difference.X === 0 && difference.Y === 0) {
+                        this.velocity = new Vector(0, 0);
+                    }
+
+                    else {
+                        let norm: Vector = difference.normalize();
+                        norm.scale(this.pace);
+
+                        this.velocity = norm;
+                    }
+                    
+                    
                     if (dist < detectionRadius) {
                         this.state = PlayerState.ToBall;
                     }
@@ -101,7 +86,6 @@ namespace Fußball_Simulation {
 
                     if (dist <= arriveRadius) {
                         this.changeStateToGotBall();
-                        console.log("!playerState was changed to GotBall!");
                     }
                     else if (dist > detectionRadius) {
                         this.state = PlayerState.Stop;
@@ -110,9 +94,21 @@ namespace Fußball_Simulation {
                     break;
 
                 case PlayerState.GotBall:
-                    console.log("!playerState is in GotBall!");
                     break;
             }
+        }
+
+        public changePace(_newPace: number): void {
+            this.pace = _newPace;
+        }
+
+        public changePrecision(_newPrecision: number): void {
+            this.precision = _newPrecision;
+        }
+
+        private changeState(): void {
+            this.state = PlayerState.Stop;
+            console.log("!state was changed!");
         }
 
         private changeStateToGotBall(): void {
@@ -125,10 +121,9 @@ namespace Fußball_Simulation {
 
             window.addEventListener("click", function tempListener(_event: MouseEvent): void {
 
-                console.log("!eventlistener was clicked");
-
-                let xPos: number = _event.clientX; 
-                let yPos: number = _event.clientY; 
+                let rect: DOMRect = (<HTMLCanvasElement>_event.target).getBoundingClientRect();
+                let xPos: number = _event.clientX - rect.left; 
+                let yPos: number = _event.clientY - rect.top; 
                 let mousePosition: Vector = new Vector (xPos, yPos);
 
                 let goTo: Vector = Vector.getDifference(mousePosition, getBall().position);
@@ -146,14 +141,11 @@ namespace Fußball_Simulation {
                 );
 
                 goTo.scale(50);
-
-                console.log("als gescalter Vecktor ist das: " + goTo);
                 moveBall(goTo);
 
                 resumeGame();
         
                 setTimeout(() => {
-                    console.log("!timeout was set!");
                     self.changeState();
                 },         3000);
                 
