@@ -11,8 +11,6 @@ namespace Fußball_Simulation {
     export let gameStatus: boolean;
 
     var cheer: HTMLAudioElement = new Audio("Assets/cheer.wav");
-    var whistle: HTMLAudioElement = new Audio("Assets/whistle.wav");
-    var whistleCount: number = 0;
 
     let scoreTeam1: number = 0;
     let scoreTeam2: number = 0;
@@ -69,8 +67,6 @@ namespace Fußball_Simulation {
 
         createPlayer();
         createBall();
-
-        whistleCount = 0;
     }
 
     function handleload(): void {
@@ -228,10 +224,6 @@ namespace Fußball_Simulation {
     }
 
     function firstBallMove(_evt: MouseEvent): void {
-        if (whistleCount == 0) {
-        PlaySound(whistle);
-        }
-        whistleCount++;
         let dir: Vector = Vector.getDifference(new Vector(_evt.x, _evt.y), getBall().position);
         dir = dir.normalize();
         dir.scale(50);
@@ -662,7 +654,7 @@ namespace Fußball_Simulation {
         
         let tricotcolor: HTMLInputElement = <HTMLInputElement>document.getElementById("tricotcolor")!;
 
-        tricotcolor.addEventListener ("change", function (event: Event): void {
+        tricotcolor.addEventListener ("change", function (): void {
             let player: Player = playerToChange[0];
             let color: string = tricotcolor.value;
             player.tricotcolor = color;

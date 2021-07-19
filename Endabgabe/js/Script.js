@@ -6,8 +6,6 @@ var Fußball_Simulation;
     let canvasWidth = window.innerWidth;
     let canvasHeight = window.innerHeight;
     var cheer = new Audio("Assets/cheer.wav");
-    var whistle = new Audio("Assets/whistle.wav");
-    var whistleCount = 0;
     let scoreTeam1 = 0;
     let scoreTeam2 = 0;
     let playerArray = [];
@@ -56,7 +54,6 @@ var Fußball_Simulation;
         ballArray = [];
         createPlayer();
         createBall();
-        whistleCount = 0;
     }
     function handleload() {
         window.addEventListener("click", firstBallMove);
@@ -176,10 +173,6 @@ var Fußball_Simulation;
     }
     Fußball_Simulation.moveBall = moveBall;
     function firstBallMove(_evt) {
-        if (whistleCount == 0) {
-            PlaySound(whistle);
-        }
-        whistleCount++;
         let dir = Fußball_Simulation.Vector.getDifference(new Fußball_Simulation.Vector(_evt.x, _evt.y), getBall().position);
         dir = dir.normalize();
         dir.scale(50);
@@ -531,7 +524,7 @@ var Fußball_Simulation;
             player.velocity.scale(newPace);
         });
         let tricotcolor = document.getElementById("tricotcolor");
-        tricotcolor.addEventListener("change", function (event) {
+        tricotcolor.addEventListener("change", function () {
             let player = playerToChange[0];
             let color = tricotcolor.value;
             player.tricotcolor = color;
