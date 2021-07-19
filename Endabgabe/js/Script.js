@@ -7,6 +7,7 @@ var Fußball_Simulation;
     let canvasHeight = window.innerHeight;
     var cheer = new Audio("Assets/cheer.wav");
     var whistle = new Audio("Assets/whistle.wav");
+    var whistleCount = 0;
     let scoreTeam1 = 0;
     let scoreTeam2 = 0;
     let playerArray = [];
@@ -15,7 +16,6 @@ var Fußball_Simulation;
     let lineJudgeArray = [];
     let refereeArray = [];
     function PlaySound(sound) {
-        console.log("im playing:" + sound);
         sound.play();
     }
     function toRadians(_deg) {
@@ -56,6 +56,7 @@ var Fußball_Simulation;
         ballArray = [];
         createPlayer();
         createBall();
+        whistleCount = 0;
     }
     function handleload() {
         window.addEventListener("click", firstBallMove);
@@ -99,7 +100,6 @@ var Fußball_Simulation;
             ballArray[0].move(1 / 20);
             // Tor links
             if (ballArray[0].position.X < window.innerWidth * 0.125 && ballArray[0].position.X < window.innerWidth * 0.13 && ballArray[0].position.Y > window.innerHeight * 0.35 && ballArray[0].position.Y < window.innerHeight * 0.65) {
-                console.log("im in goal left function");
                 resetGame();
                 scoreTeam2++;
                 let score = document.getElementById("score");
@@ -176,7 +176,10 @@ var Fußball_Simulation;
     }
     Fußball_Simulation.moveBall = moveBall;
     function firstBallMove(_evt) {
-        //PlaySound(whistle);
+        if (whistleCount == 0) {
+            PlaySound(whistle);
+        }
+        whistleCount++;
         let dir = Fußball_Simulation.Vector.getDifference(new Fußball_Simulation.Vector(_evt.x, _evt.y), getBall().position);
         dir = dir.normalize();
         dir.scale(50);
@@ -390,7 +393,6 @@ var Fußball_Simulation;
             new Fußball_Simulation.Vector(window.innerWidth * 0.75, window.innerHeight * 0.65),
             new Fußball_Simulation.Vector(window.innerWidth * 0.85, window.innerHeight * 0.5)
         ]; // Team2PositionArray
-        //console.log(startPositionArray[0][0]);
         for (let i = 0; i < startPositionArrayTeam1.length; i++) {
             let player = new Fußball_Simulation.Player((startPositionArrayTeam1[i]), playerVelocity, playerSkills[i].tricotcolor, playerSkills[i].name, playerSkills[i].number, playerSkills[i].playerPrecision, playerSkills[i].playerPace, playerSkills[i].team);
             player.draw();
@@ -428,7 +430,6 @@ var Fußball_Simulation;
         }); // eventlistener
     } // initilize
     function showForm(_player) {
-        console.log("!! showform wurde gestartet mit " + _player.name);
         //playerArray.splice(playerArray.indexOf(_player, 1));
         let name = document.querySelector("#PlayerName");
         name.innerHTML = _player.name;

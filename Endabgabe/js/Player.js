@@ -69,8 +69,8 @@ var Fußball_Simulation;
                     break;
                 case PlayerState.GotBall:
                     break;
-            }
-        }
+            } // switch
+        } // update
         changePace(_newPace) {
             this.pace = _newPace;
         }
@@ -109,8 +109,8 @@ var Fußball_Simulation;
             let posession = document.getElementById("posession");
             posession.innerHTML = "currently in ball-posession: " + this.name;
             this.state = PlayerState.GotBall;
-        }
-    }
+        } // changeState
+    } // class
     Fußball_Simulation.Player = Player;
 })(Fußball_Simulation || (Fußball_Simulation = {})); // namespace
 //# sourceMappingURL=Player.js.map

@@ -35,9 +35,7 @@ namespace Fußball_Simulation {
 
         public checkClick(_x: number, _y: number): boolean {
             let eventData: Vector = new Vector(_x, _y);
-
             let difference: Vector = Vector.getDifference(this.position, eventData);
-            
             let length: number = difference.length();
 
             if (length < 40) {
@@ -49,7 +47,6 @@ namespace Fußball_Simulation {
         }
 
         public update(): void {
-
             let checkForRadius: Vector = Vector.getDifference(getBall().position, this.position);
             const dist: number = checkForRadius.length();
 
@@ -93,8 +90,8 @@ namespace Fußball_Simulation {
 
                 case PlayerState.GotBall:
                     break;
-            }
-        }
+            }// switch
+        }// update
 
         public changePace(_newPace: number): void {
             this.pace = _newPace;
@@ -153,6 +150,6 @@ namespace Fußball_Simulation {
             posession.innerHTML = "currently in ball-posession: " + this.name;
 
             this.state = PlayerState.GotBall;
-        }
-    }
+        }// changeState
+    }// class
 } // namespace

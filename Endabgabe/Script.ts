@@ -12,6 +12,7 @@ namespace Fußball_Simulation {
 
     var cheer: HTMLAudioElement = new Audio("Assets/cheer.wav");
     var whistle: HTMLAudioElement = new Audio("Assets/whistle.wav");
+    var whistleCount: number = 0;
 
     let scoreTeam1: number = 0;
     let scoreTeam2: number = 0;
@@ -24,7 +25,6 @@ namespace Fußball_Simulation {
     let refereeArray: Referee[] = [];
 
     function PlaySound(sound: HTMLAudioElement): void {
-        console.log("im playing:" + sound);
         sound.play();
     }
 
@@ -69,6 +69,8 @@ namespace Fußball_Simulation {
 
         createPlayer();
         createBall();
+
+        whistleCount = 0;
     }
 
     function handleload(): void {
@@ -134,7 +136,6 @@ namespace Fußball_Simulation {
             // Tor links
             if (ballArray[0].position.X < window.innerWidth * 0.125 && ballArray[0].position.X < window.innerWidth * 0.13 && ballArray[0].position.Y > window.innerHeight * 0.35 && ballArray[0].position.Y < window.innerHeight * 0.65) {
 
-                console.log("im in goal left function");
                 resetGame();
                 scoreTeam2++;
 
@@ -223,12 +224,14 @@ namespace Fußball_Simulation {
     }// update
 
     export function moveBall(_newDir: Vector): void {
-    
         ballArray[0].setVelocity(_newDir);
     }
 
     function firstBallMove(_evt: MouseEvent): void {
-        //PlaySound(whistle);
+        if (whistleCount == 0) {
+        PlaySound(whistle);
+        }
+        whistleCount++;
         let dir: Vector = Vector.getDifference(new Vector(_evt.x, _evt.y), getBall().position);
         dir = dir.normalize();
         dir.scale(50);
@@ -489,17 +492,13 @@ namespace Fußball_Simulation {
             new Vector(window.innerWidth * 0.85, window.innerHeight * 0.5)
         ]; // Team2PositionArray
 
-        //console.log(startPositionArray[0][0]);
-
         for (let i: number = 0; i < startPositionArrayTeam1.length; i++) {
-
             let player: Player = new Player((startPositionArrayTeam1[i]), playerVelocity, playerSkills[i].tricotcolor, playerSkills[i].name, playerSkills[i].number, playerSkills[i].playerPrecision, playerSkills[i].playerPace, playerSkills[i].team);
             player.draw();
             playerArray.push(player);
         }
 
         for (let j: number = 0; j < startPositionArrayTeam2.length; j++) {
-
             let player: Player = new Player((startPositionArrayTeam2[j]), playerVelocity, playerSkills[j + 11].tricotcolor, playerSkills[j + 11].name, playerSkills[j + 11].number, playerSkills[j + 11].playerPrecision, playerSkills[j + 11].playerPace, playerSkills[j + 11].team);
             player.draw();
             playerArray.push(player);
@@ -524,7 +523,6 @@ namespace Fußball_Simulation {
                     playerClicked = player;
                 }
             }
-
             // wenn playerClicked nicht null ist, also ein SPieler gefunden wurde, soll das Form erscheinen
             if (playerClicked) {
                 formStatusV();
@@ -538,11 +536,7 @@ namespace Fußball_Simulation {
     }// initilize
 
     function showForm(_player: Player): void {
-
-        console.log("!! showform wurde gestartet mit " + _player.name);
-
         //playerArray.splice(playerArray.indexOf(_player, 1));
-
         let name: HTMLElement = document.querySelector("#PlayerName")!;
         name.innerHTML = _player.name;
         let number: HTMLElement = document.querySelector("#PlayerNumber")!;
@@ -577,8 +571,6 @@ namespace Fußball_Simulation {
             y++;
         }
 
-
-
         let precisionOfPlayerMin: HTMLInputElement = <HTMLInputElement>document.getElementById("PrecisionSliderMin");
         precisionOfPlayerMin.value = (_player.minPrecision.toString());
 
@@ -606,7 +598,6 @@ namespace Fußball_Simulation {
     }// showForm
 
     function formchange(): void {
-
         let precisionMin: HTMLInputElement = <HTMLInputElement>document.getElementById("PrecisionSliderMin");
         let precisionMax: HTMLInputElement = <HTMLInputElement>document.getElementById("PrecisionSliderMax");
 
@@ -650,7 +641,6 @@ namespace Fußball_Simulation {
             player.pace = newPace;
             let pace: HTMLElement = document.getElementById("pace")!;
             pace.innerHTML = "pace: " + player.pace;
-
             // verschnellert den Spieler durch skalierung der velocity
             player.velocity.scale(newPace);
         });
@@ -710,7 +700,6 @@ namespace Fußball_Simulation {
             // form soll für neuen Player angepasst werden
             showForm(newPlayer);
         });
-
     }// formchange
 
     function createLineJudge(): void {
@@ -738,7 +727,6 @@ namespace Fußball_Simulation {
     }
 
     function createBall(): void {
-
         let ballPosition: Vector = new Vector(window.innerWidth * 0.5, window.innerHeight * 0.5);
         let ballVelocity: Vector = new Vector(0, 0);
         let color: string = "red";
@@ -748,11 +736,9 @@ namespace Fußball_Simulation {
         ball.draw();
 
         ballArray.push(ball);
-
     }
 
     function createBackground(): void {
-        
         crc2.beginPath();
 
         crc2.save();
@@ -774,7 +760,6 @@ namespace Fußball_Simulation {
     }
 
     function createField(): void {
-
         crc2.beginPath();
 
         // Feld außen grün
@@ -806,7 +791,6 @@ namespace Fußball_Simulation {
         crc2.stroke();
 
         crc2.restore();
-
 
         // Tor groß
         crc2.save();
