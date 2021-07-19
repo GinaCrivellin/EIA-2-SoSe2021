@@ -10,6 +10,9 @@ var Fußball_Simulation;
             let difference = new Vector(_v1.X - _v2.X, _v1.Y - _v2.Y);
             return difference;
         }
+        static dot(_a, _b) {
+            return _a.X * _b.X + _a.Y * _b.Y;
+        }
         scale(_factor) {
             this.X *= _factor;
             this.Y *= _factor;
@@ -21,6 +24,10 @@ var Fußball_Simulation;
         length() {
             let normal = Math.sqrt(this.X * this.X + this.Y * this.Y);
             return normal;
+        }
+        normalize() {
+            const length = this.length();
+            return new Vector(this.X / length, this.Y / length);
         }
     }
     Fußball_Simulation.Vector = Vector;

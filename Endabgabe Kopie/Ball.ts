@@ -4,14 +4,17 @@ namespace Fußball_Simulation {
 
         public color: string;
 
-        constructor(_position: Vector, _velocity: Vector, _radius: Vector, _color: string) {
-            super(_position, _velocity, _radius);
+        constructor(_position: Vector, _velocity: Vector, _color: string) {
+            super(_position, _velocity);
 
             this.color = _color;
         }
 
         move(_timeslice: number): void {
-            //
+            super.move(_timeslice);
+
+            // Apply friction
+            this.velocity.scale(0.99);
         }
 
         draw(): void {
@@ -21,17 +24,15 @@ namespace Fußball_Simulation {
             crc2.beginPath();
 
             crc2.arc(this.position.X, this.position.Y, 15, 0, 2 * Math.PI);
+            //crc2.fillRect(0, 0, 30, 30);
+
             var img: HTMLImageElement = new Image();
             img.src = "Assets/ball.jpg";
             img.onload = function(): void {
-            var pattern: CanvasPattern = crc2.createPattern(img, "repeat")!;
+            var pattern: any = crc2.createPattern(img, "repeat");
             crc2.fillStyle = pattern;
-            crc2.fillRect(0, 0, 30, 30);
+            crc2.fillRect(0, 0, 20, 20);
             };
-
-            //crc2.fillRect(0, 0, 300, 300);
-            //crc2.fillStyle = this.color;
-            //crc2.fill();
 
             crc2.stroke();
 
@@ -40,19 +41,5 @@ namespace Fußball_Simulation {
             crc2.restore();
         }
 
-        klickPath(_timeslice: number, _velocity: Vector): void {
-
-            console.log("klickPath started");
-            let offset: Vector = new Vector(_velocity.X, _velocity.Y);
-
-            let difference: Vector = Vector.getDifference(this.position, _velocity);
-
-            let differenceNumber: number = difference.length();
-
-            while (differenceNumber > 3) {
-            offset.scale(_timeslice);
-            this.position.add(offset);
-            }
-        }
     }
 }

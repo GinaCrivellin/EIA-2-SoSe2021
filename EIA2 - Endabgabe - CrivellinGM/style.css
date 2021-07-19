@@ -1,0 +1,23 @@
+#FormBox{
+    z-index: +1;
+    background-color:bisque;
+    width: 180px;
+    height: 550px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    visibility: hidden;
+}
+
+h1{
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+}
+
+p{
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+    font-size: small;
+}

@@ -14,11 +14,14 @@ namespace Fußball_Simulation {
             return difference;
         }
 
+        public static dot(_a: Vector, _b: Vector): number {
+            return _a.X * _b.X + _a.Y * _b.Y;
+        }
+
         public scale (_factor: number): void {
             this.X *= _factor;
             this.Y *= _factor;
         }
-
 
         public add(_added: Vector): void {
             this.X += _added.X;
@@ -28,6 +31,13 @@ namespace Fußball_Simulation {
         public length(): number {
             let normal: number = Math.sqrt(this.X * this.X + this.Y * this.Y);
             return normal;
+        }
+
+        public normalize(): Vector {
+            const length: number = this.length();
+            
+            return new Vector(this.X / length, this.Y / length);
+
         }
     }
 }
