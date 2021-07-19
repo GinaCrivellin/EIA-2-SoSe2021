@@ -12,19 +12,25 @@ var Fußball_Simulation;
     let ballArray = [];
     let lineJudgeArray = [];
     let refereeArray = [];
+    function toRadians(_deg) {
+        return _deg / 180 * Math.PI;
+    }
+    Fußball_Simulation.toRadians = toRadians;
+    function randInterval(_a, _b) {
+        return Math.random() * (_b - _a) + _a;
+    }
+    Fußball_Simulation.randInterval = randInterval;
     function getBall() {
         return ballArray[0];
     }
     Fußball_Simulation.getBall = getBall;
     function pauseGame() {
-        console.log("game was paused");
         Fußball_Simulation.gameStatus = true;
     }
     Fußball_Simulation.pauseGame = pauseGame;
     function resumeGame() {
         Fußball_Simulation.gameStatus = false;
         window.addEventListener("click", firstBallMove);
-        console.log("game was resumed");
     }
     Fußball_Simulation.resumeGame = resumeGame;
     function formStatusV() {
@@ -56,8 +62,6 @@ var Fußball_Simulation;
         Fußball_Simulation.canvas.width = canvasWidth;
         Fußball_Simulation.canvas.height = canvasHeight;
         Fußball_Simulation.crc2 = Fußball_Simulation.canvas.getContext("2d");
-        //let scoreTeam1: number = 0;
-        //let scoreTeam2: number = 0;
         let score = document.getElementById("score");
         score.innerHTML = "current score: " + scoreTeam1 + " | " + scoreTeam2;
         createBackground();
@@ -94,6 +98,8 @@ var Fußball_Simulation;
                 let score = document.getElementById("score");
                 score.innerHTML = "current score: " + scoreTeam1 + " | " + scoreTeam2;
                 message.innerHTML = "goaaaaaal!";
+                var cheer = new Audio("Assets/cheer.wav");
+                cheer.play();
                 setTimeout(() => {
                     message.innerHTML = "";
                 }, 4000);
@@ -176,7 +182,7 @@ var Fußball_Simulation;
                 name: "Immobile",
                 tricotcolor: "#0A36AF",
                 number: 17,
-                playerPace: 10,
+                playerPace: 25,
                 playerPrecision: 0,
                 team: 1
             },
@@ -184,7 +190,7 @@ var Fußball_Simulation;
                 name: "Chiellini",
                 tricotcolor: "#0A36AF",
                 number: 3,
-                playerPace: 10,
+                playerPace: 20,
                 playerPrecision: 10,
                 team: 1
             },
@@ -192,7 +198,7 @@ var Fußball_Simulation;
                 name: "Donnarumma",
                 tricotcolor: "#0A36AF",
                 number: 21,
-                playerPace: 10,
+                playerPace: 30,
                 playerPrecision: 10,
                 team: 1
             },
@@ -200,7 +206,7 @@ var Fußball_Simulation;
                 name: "Spinazzola",
                 tricotcolor: "#0A36AF",
                 number: 4,
-                playerPace: 10,
+                playerPace: 40,
                 playerPrecision: 10,
                 team: 1
             },
@@ -208,7 +214,7 @@ var Fußball_Simulation;
                 name: "Bonucci",
                 tricotcolor: "#0A36AF",
                 number: 19,
-                playerPace: 10,
+                playerPace: 20,
                 playerPrecision: 10,
                 team: 1
             },
@@ -216,7 +222,7 @@ var Fußball_Simulation;
                 name: "Di Lorenzo",
                 tricotcolor: "#0A36AF",
                 number: 2,
-                playerPace: 10,
+                playerPace: 25,
                 playerPrecision: 10,
                 team: 1
             },
@@ -224,7 +230,7 @@ var Fußball_Simulation;
                 name: "Pessina",
                 tricotcolor: "#0A36AF",
                 number: 12,
-                playerPace: 10,
+                playerPace: 20,
                 playerPrecision: 10,
                 team: 1
             },
@@ -232,7 +238,7 @@ var Fußball_Simulation;
                 name: "Locatelli",
                 tricotcolor: "#0A36AF",
                 number: 5,
-                playerPace: 10,
+                playerPace: 30,
                 playerPrecision: 10,
                 team: 1
             },
@@ -240,7 +246,7 @@ var Fußball_Simulation;
                 name: "Barella",
                 tricotcolor: "#0A36AF",
                 number: 18,
-                playerPace: 10,
+                playerPace: 20,
                 playerPrecision: 10,
                 team: 1
             },
@@ -248,7 +254,7 @@ var Fußball_Simulation;
                 name: "Chiesa",
                 tricotcolor: "#0A36AF",
                 number: 14,
-                playerPace: 10,
+                playerPace: 35,
                 playerPrecision: 10,
                 team: 1
             },
@@ -256,7 +262,7 @@ var Fußball_Simulation;
                 name: "Insigne",
                 tricotcolor: "#0A36AF",
                 number: 10,
-                playerPace: 10,
+                playerPace: 20,
                 playerPrecision: 10,
                 team: 1
             },
@@ -265,7 +271,7 @@ var Fußball_Simulation;
                 name: "Müller",
                 tricotcolor: "#f5b342",
                 number: 17,
-                playerPace: 10,
+                playerPace: 20,
                 playerPrecision: 10,
                 team: 2
             },
@@ -273,7 +279,7 @@ var Fußball_Simulation;
                 name: "Schmidt",
                 tricotcolor: "#f5b342",
                 number: 3,
-                playerPace: 10,
+                playerPace: 25,
                 playerPrecision: 10,
                 team: 2
             },
@@ -281,7 +287,7 @@ var Fußball_Simulation;
                 name: "Schneider",
                 tricotcolor: "#f5b342",
                 number: 21,
-                playerPace: 10,
+                playerPace: 30,
                 playerPrecision: 10,
                 team: 2
             },
@@ -289,7 +295,7 @@ var Fußball_Simulation;
                 name: "Günter",
                 tricotcolor: "#f5b342",
                 number: 4,
-                playerPace: 10,
+                playerPace: 20,
                 playerPrecision: 10,
                 team: 2
             },
@@ -297,7 +303,7 @@ var Fußball_Simulation;
                 name: "Fischer",
                 tricotcolor: "#f5b342",
                 number: 19,
-                playerPace: 10,
+                playerPace: 40,
                 playerPrecision: 10,
                 team: 2
             },
@@ -305,7 +311,7 @@ var Fußball_Simulation;
                 name: "Weber",
                 tricotcolor: "#f5b342",
                 number: 2,
-                playerPace: 10,
+                playerPace: 20,
                 playerPrecision: 10,
                 team: 2
             },
@@ -313,7 +319,7 @@ var Fußball_Simulation;
                 name: "Meyer",
                 tricotcolor: "#f5b342",
                 number: 12,
-                playerPace: 10,
+                playerPace: 25,
                 playerPrecision: 10,
                 team: 2
             },
@@ -321,7 +327,7 @@ var Fußball_Simulation;
                 name: "Wagner",
                 tricotcolor: "#f5b342",
                 number: 5,
-                playerPace: 10,
+                playerPace: 30,
                 playerPrecision: 10,
                 team: 2
             },
@@ -329,7 +335,7 @@ var Fußball_Simulation;
                 name: "Schulz",
                 tricotcolor: "#f5b342",
                 number: 18,
-                playerPace: 10,
+                playerPace: 40,
                 playerPrecision: 10,
                 team: 2
             },
@@ -345,7 +351,7 @@ var Fußball_Simulation;
                 name: "Koch",
                 tricotcolor: "#f5b342",
                 number: 10,
-                playerPace: 10,
+                playerPace: 20,
                 playerPrecision: 10,
                 team: 2
             }
@@ -474,7 +480,7 @@ var Fußball_Simulation;
             player.minPrecision = newPrecisionMin;
             let newPrecisionMax = parseInt(precisionMax.value);
             player.maxPrecision = newPrecisionMax;
-            player.precision = Math.round(Fußball_Simulation.randInterval(newPrecisionMin, newPrecisionMax));
+            player.precision = Math.round(randInterval(newPrecisionMin, newPrecisionMax));
             let precision = document.getElementById("precision");
             precision.innerHTML = "precision: " + player.precision;
         });
@@ -484,7 +490,7 @@ var Fußball_Simulation;
             player.minPrecision = newPrecisionMin;
             let newPrecisionMax = parseInt(precisionMax.value);
             player.maxPrecision = newPrecisionMax;
-            player.precision = Math.round(Fußball_Simulation.randInterval(newPrecisionMin, newPrecisionMax));
+            player.precision = Math.round(randInterval(newPrecisionMin, newPrecisionMax));
             let precision = document.getElementById("precision");
             precision.innerHTML = "precision: " + player.precision;
         });
@@ -496,7 +502,7 @@ var Fußball_Simulation;
             player.minPace = newPaceMin;
             let newPaceMax = parseInt(paceMax.value);
             player.maxPace = newPaceMax;
-            let newPace = Math.round(Fußball_Simulation.randInterval(newPaceMin, newPaceMax));
+            let newPace = Math.round(randInterval(newPaceMin, newPaceMax));
             player.pace = newPace;
             let pace = document.getElementById("pace");
             pace.innerHTML = "pace: " + player.pace;
@@ -509,8 +515,8 @@ var Fußball_Simulation;
             player.minPace = newPaceMin;
             let newPaceMax = parseInt(paceMax.value);
             player.maxPace = newPaceMax;
-            let newPace = Math.round(Fußball_Simulation.randInterval(newPaceMin, newPaceMax));
-            player.pace = Math.round(Fußball_Simulation.randInterval(newPaceMin, newPaceMax));
+            let newPace = Math.round(randInterval(newPaceMin, newPaceMax));
+            player.pace = Math.round(randInterval(newPaceMin, newPaceMax));
             let pace = document.getElementById("pace");
             pace.innerHTML = "pace: " + player.pace;
             player.velocity.scale(newPace);
@@ -563,8 +569,7 @@ var Fußball_Simulation;
         lineJudgeArray.push(lineJudge2);
     }
     function createReferee() {
-        let refereePosition = new Fußball_Simulation.Vector(ballArray[0].position.X + 20, window.innerHeight * 0.4);
-        let referee = new Fußball_Simulation.Referee(refereePosition, new Fußball_Simulation.Vector(0, 0), "pink");
+        let referee = new Fußball_Simulation.Referee(new Fußball_Simulation.Vector(0, 0), new Fußball_Simulation.Vector(0, 0), "pink");
         referee.draw();
         referee.move(1 / 40);
         refereeArray.push(referee);

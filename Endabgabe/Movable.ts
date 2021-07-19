@@ -20,9 +20,6 @@ namespace Fußball_Simulation {
 
         public setVelocity(vel: Vector): void {
             this.velocity = vel;
-            console.log("new velocity was set");
         }
-
-
     }
 }

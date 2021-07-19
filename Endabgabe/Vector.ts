@@ -1,13 +1,5 @@
 namespace Fußball_Simulation {
 
-    export function toRadians(_deg: number): number {
-        return _deg / 180 * Math.PI;
-    }
-
-    export function randInterval(_a: number, _b: number): number {
-        return Math.random() * (_b - _a) + _a;
-    }
-
     export class Vector {
         public X: number;
         public Y: number;

@@ -25,7 +25,7 @@ namespace Fußball_Simulation {
 
         constructor(_position: Vector, _velocity: Vector, _tricotcolor: string, _name: string, _number: number, _precision: number, _pace: number, _team: number) {
             super(_position, _velocity, _tricotcolor);
-            this.startPos = _position;
+            this.startPos = new Vector(_position.X, _position.Y);
             this.name = _name;
             this.number = _number;
             this.precision = _precision;
@@ -53,26 +53,24 @@ namespace Fußball_Simulation {
             let checkForRadius: Vector = Vector.getDifference(getBall().position, this.position);
             const dist: number = checkForRadius.length();
 
-            const detectionRadius: number = 80;
-            const arriveRadius: number = 10;
+            const detectionRadius: number = 90;
+            const arriveRadius: number = 20;
 
             switch (this.state) {
-
                 case PlayerState.Stop:
-                    let difference: Vector = Vector.getDifference(this.startPos, this.position);
-
-                    if (difference.X === 0 && difference.Y === 0) {
-                        this.velocity = new Vector(0, 0);
+                    // Move to start position if not already there
+                    const difference: Vector = Vector.getDifference(this.startPos, this.position);
+                    if (difference.length() === 0) {
+                        this.setVelocity(new Vector(0, 0));
                     }
-
                     else {
                         let norm: Vector = difference.normalize();
                         norm.scale(this.pace);
 
-                        this.velocity = norm;
+                        this.setVelocity(norm);
                     }
                     
-                    
+                    // Wait for ball to come into detection radius
                     if (dist < detectionRadius) {
                         this.state = PlayerState.ToBall;
                     }
@@ -106,9 +104,8 @@ namespace Fußball_Simulation {
             this.precision = _newPrecision;
         }
 
-        private changeState(): void {
+        private changeStateToStop(): void {
             this.state = PlayerState.Stop;
-            console.log("!state was changed!");
         }
 
         private changeStateToGotBall(): void {
@@ -146,7 +143,7 @@ namespace Fußball_Simulation {
                 resumeGame();
         
                 setTimeout(() => {
-                    self.changeState();
+                    self.changeStateToStop();
                 },         3000);
                 
                 window.removeEventListener("click", tempListener);

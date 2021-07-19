@@ -16,7 +16,7 @@ var Fußball_Simulation;
             this.minPrecision = 0;
             this.maxPrecision = 0;
             this.state = PlayerState.Stop;
-            this.startPos = _position;
+            this.startPos = new Fußball_Simulation.Vector(_position.X, _position.Y);
             this.name = _name;
             this.number = _number;
             this.precision = _precision;
@@ -37,19 +37,25 @@ var Fußball_Simulation;
         update() {
             let checkForRadius = Fußball_Simulation.Vector.getDifference(Fußball_Simulation.getBall().position, this.position);
             const dist = checkForRadius.length();
-            const detectionRadius = 80;
-            const arriveRadius = 10;
+            const detectionRadius = 90;
+            const arriveRadius = 20;
             switch (this.state) {
                 case PlayerState.Stop:
-                    let difference = Fußball_Simulation.Vector.getDifference(this.startPos, this.position);
-                    if (difference.X === 0 && difference.Y === 0) {
-                        this.velocity = new Fußball_Simulation.Vector(0, 0);
+                    // Move to start position if not already there
+                    const difference = Fußball_Simulation.Vector.getDifference(this.startPos, this.position);
+                    console.log('Start pos: ', this.startPos);
+                    console.log('Current pos: ', this.position);
+                    console.log('Difference to start pos: ', difference);
+                    if (difference.length() === 0) {
+                        console.log('Already at start position!');
+                        this.setVelocity(new Fußball_Simulation.Vector(0, 0));
                     }
                     else {
                         let norm = difference.normalize();
                         norm.scale(this.pace);
-                        this.velocity = norm;
+                        this.setVelocity(norm);
                     }
+                    // Wait for ball to come into detection radius
                     if (dist < detectionRadius) {
                         this.state = PlayerState.ToBall;
                     }
@@ -75,9 +81,8 @@ var Fußball_Simulation;
         changePrecision(_newPrecision) {
             this.precision = _newPrecision;
         }
-        changeState() {
+        changeStateToStop() {
             this.state = PlayerState.Stop;
-            console.log("!state was changed!");
         }
         changeStateToGotBall() {
             Fußball_Simulation.pauseGame();
@@ -101,7 +106,7 @@ var Fußball_Simulation;
                 Fußball_Simulation.moveBall(goTo);
                 Fußball_Simulation.resumeGame();
                 setTimeout(() => {
-                    self.changeState();
+                    self.changeStateToStop();
                 }, 3000);
                 window.removeEventListener("click", tempListener);
             });

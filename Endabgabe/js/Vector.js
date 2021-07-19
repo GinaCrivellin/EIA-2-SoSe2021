@@ -1,14 +1,6 @@
 "use strict";
 var Fußball_Simulation;
 (function (Fußball_Simulation) {
-    function toRadians(_deg) {
-        return _deg / 180 * Math.PI;
-    }
-    Fußball_Simulation.toRadians = toRadians;
-    function randInterval(_a, _b) {
-        return Math.random() * (_b - _a) + _a;
-    }
-    Fußball_Simulation.randInterval = randInterval;
     class Vector {
         constructor(_X, _Y) {
             this.X = _X;

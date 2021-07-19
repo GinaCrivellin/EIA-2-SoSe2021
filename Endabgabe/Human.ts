@@ -6,9 +6,6 @@ namespace Fußball_Simulation {
 
         constructor(_position: Vector, _velocity: Vector, _tricotcolor: string) {
             super(_position, _velocity);
-
-            this.position = _position;
-
             this.tricotcolor = _tricotcolor;
         }
 

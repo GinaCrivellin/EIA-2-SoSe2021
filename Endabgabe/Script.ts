@@ -20,20 +20,25 @@ namespace Fußball_Simulation {
     let lineJudgeArray: LineJudge[] = [];
     let refereeArray: Referee[] = [];
 
+    export function toRadians(_deg: number): number {
+        return _deg / 180 * Math.PI;
+    }
+
+    export function randInterval(_a: number, _b: number): number {
+        return Math.random() * (_b - _a) + _a;
+    }
+
     export function getBall(): Ball {
         return ballArray[0];
     }
 
     export function pauseGame(): void {
-        console.log("game was paused");
         gameStatus = true;
     }
 
     export function resumeGame(): void {
         gameStatus = false;
-
         window.addEventListener("click", firstBallMove);
-        console.log("game was resumed");
     }
 
     export function formStatusV(): void {
@@ -52,17 +57,13 @@ namespace Fußball_Simulation {
 
     function resetGame(): void {
         playerArray = [];
-
         ballArray = [];
 
         createPlayer();
-
         createBall();
-
     }
 
     function handleload(): void {
-
         window.addEventListener("click", firstBallMove);
 
         // form is not visible + resumeGame = gameStatus = false;
@@ -76,9 +77,6 @@ namespace Fußball_Simulation {
         canvas.height = canvasHeight;
 
         crc2 = canvas.getContext("2d")!;
-
-        //let scoreTeam1: number = 0;
-        //let scoreTeam2: number = 0;
 
         let score: HTMLElement = document.getElementById("score")!;
         score.innerHTML = "current score: " + scoreTeam1 + " | " + scoreTeam2;
@@ -109,15 +107,12 @@ namespace Fußball_Simulation {
             createField(); 
 
             for (let player of playerArray) {
-
                 player.update();
                 player.draw();
                 player.move(1 / 40);
-
             }
 
             for (let lineJudge of lineJudgeArray) {
-
                 lineJudge.draw();
                 lineJudge.move(1 / 40);
             }
@@ -137,6 +132,9 @@ namespace Fußball_Simulation {
                 let score: HTMLElement = document.getElementById("score")!;
                 score.innerHTML = "current score: " + scoreTeam1 + " | " + scoreTeam2;
                 message.innerHTML = "goaaaaaal!";
+
+                let sound: HTMLAudioElement = <HTMLAudioElement>document.getElementById("cheer")!;
+                sound.play();
 
                 setTimeout(() => {
                     message.innerHTML = "";
@@ -250,7 +248,7 @@ namespace Fußball_Simulation {
                 name:  "Immobile",
                 tricotcolor: "#0A36AF",
                 number: 17,
-                playerPace: 10,
+                playerPace: 25,
                 playerPrecision: 0,
                 team: 1  
             },
@@ -259,7 +257,7 @@ namespace Fußball_Simulation {
                 name:  "Chiellini",
                 tricotcolor: "#0A36AF",
                 number: 3,
-                playerPace: 10,
+                playerPace: 20,
                 playerPrecision: 10,
                 team: 1    
             },
@@ -268,7 +266,7 @@ namespace Fußball_Simulation {
                 name:  "Donnarumma",
                 tricotcolor: "#0A36AF",
                 number: 21,
-                playerPace: 10,
+                playerPace: 30,
                 playerPrecision: 10,
                 team: 1   
             },
@@ -277,7 +275,7 @@ namespace Fußball_Simulation {
                 name:  "Spinazzola",
                 tricotcolor: "#0A36AF",
                 number: 4,
-                playerPace: 10,
+                playerPace: 40,
                 playerPrecision: 10,
                 team: 1    
             },
@@ -286,7 +284,7 @@ namespace Fußball_Simulation {
                 name:  "Bonucci",
                 tricotcolor: "#0A36AF",
                 number: 19,
-                playerPace: 10,
+                playerPace: 20,
                 playerPrecision: 10,
                 team: 1    
             },
@@ -295,7 +293,7 @@ namespace Fußball_Simulation {
                 name:  "Di Lorenzo",
                 tricotcolor: "#0A36AF",
                 number: 2,
-                playerPace: 10,
+                playerPace: 25,
                 playerPrecision: 10,
                 team: 1    
             },
@@ -304,7 +302,7 @@ namespace Fußball_Simulation {
                 name:  "Pessina",
                 tricotcolor: "#0A36AF",
                 number: 12,
-                playerPace: 10,
+                playerPace: 20,
                 playerPrecision: 10,
                 team: 1    
             },
@@ -313,7 +311,7 @@ namespace Fußball_Simulation {
                 name:  "Locatelli",
                 tricotcolor: "#0A36AF",
                 number: 5,
-                playerPace: 10,
+                playerPace: 30,
                 playerPrecision: 10,
                 team: 1    
             },
@@ -322,7 +320,7 @@ namespace Fußball_Simulation {
                 name:  "Barella",
                 tricotcolor: "#0A36AF",
                 number: 18,
-                playerPace: 10,
+                playerPace: 20,
                 playerPrecision: 10,
                 team: 1    
             },
@@ -331,7 +329,7 @@ namespace Fußball_Simulation {
                 name:  "Chiesa",
                 tricotcolor: "#0A36AF",
                 number: 14,
-                playerPace: 10,
+                playerPace: 35,
                 playerPrecision: 10,
                 team: 1    
             },
@@ -340,7 +338,7 @@ namespace Fußball_Simulation {
                 name:  "Insigne",
                 tricotcolor: "#0A36AF",
                 number: 10,
-                playerPace: 10,
+                playerPace: 20,
                 playerPrecision: 10,
                 team: 1    
             },
@@ -351,7 +349,7 @@ namespace Fußball_Simulation {
                 name:  "Müller",
                 tricotcolor: "#f5b342",
                 number: 17,
-                playerPace: 10,
+                playerPace: 20,
                 playerPrecision: 10,
                 team: 2   
             },
@@ -360,7 +358,7 @@ namespace Fußball_Simulation {
                 name:  "Schmidt",
                 tricotcolor: "#f5b342",
                 number: 3,
-                playerPace: 10,
+                playerPace: 25,
                 playerPrecision: 10,
                 team: 2    
             },
@@ -369,7 +367,7 @@ namespace Fußball_Simulation {
                 name:  "Schneider",
                 tricotcolor: "#f5b342",
                 number: 21,
-                playerPace: 10,
+                playerPace: 30,
                 playerPrecision: 10,
                 team: 2    
             },
@@ -378,7 +376,7 @@ namespace Fußball_Simulation {
                 name:  "Günter",
                 tricotcolor: "#f5b342",
                 number: 4,
-                playerPace: 10,
+                playerPace: 20,
                 playerPrecision: 10,
                 team: 2  
             },
@@ -387,7 +385,7 @@ namespace Fußball_Simulation {
                 name:  "Fischer",
                 tricotcolor: "#f5b342",
                 number: 19,
-                playerPace: 10,
+                playerPace: 40,
                 playerPrecision: 10,
                 team: 2   
             },
@@ -396,7 +394,7 @@ namespace Fußball_Simulation {
                 name:  "Weber",
                 tricotcolor: "#f5b342",
                 number: 2,
-                playerPace: 10,
+                playerPace: 20,
                 playerPrecision: 10,
                 team: 2    
             },
@@ -405,7 +403,7 @@ namespace Fußball_Simulation {
                 name:  "Meyer",
                 tricotcolor: "#f5b342",
                 number: 12,
-                playerPace: 10,
+                playerPace: 25,
                 playerPrecision: 10,
                 team: 2   
             },
@@ -414,7 +412,7 @@ namespace Fußball_Simulation {
                 name:  "Wagner",
                 tricotcolor: "#f5b342",
                 number: 5,
-                playerPace: 10,
+                playerPace: 30,
                 playerPrecision: 10,
                 team: 2   
             },
@@ -423,7 +421,7 @@ namespace Fußball_Simulation {
                 name:  "Schulz",
                 tricotcolor: "#f5b342",
                 number: 18,
-                playerPace: 10,
+                playerPace: 40,
                 playerPrecision: 10,
                 team: 2   
             },
@@ -441,7 +439,7 @@ namespace Fußball_Simulation {
                 name:  "Koch",
                 tricotcolor: "#f5b342",
                 number: 10,
-                playerPace: 10,
+                playerPace: 20,
                 playerPrecision: 10,
                 team: 2   
             }
@@ -723,9 +721,7 @@ namespace Fußball_Simulation {
     }
 
     function createReferee(): void {
-
-        let refereePosition: Vector = new Vector(ballArray[0].position.X + 20, window.innerHeight * 0.4);
-        let referee: Referee = new Referee(refereePosition, new Vector(0, 0), "pink");
+        let referee: Referee = new Referee(new Vector(0, 0), new Vector(0, 0), "pink");
 
         referee.draw();
         referee.move(1 / 40);

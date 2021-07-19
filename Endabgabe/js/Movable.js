@@ -13,7 +13,6 @@ var Fußball_Simulation;
         }
         setVelocity(vel) {
             this.velocity = vel;
-            console.log("new velocity was set");
         }
     }
     Fußball_Simulation.Movable = Movable;

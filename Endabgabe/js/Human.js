@@ -4,7 +4,6 @@ var Fußball_Simulation;
     class Human extends Fußball_Simulation.Movable {
         constructor(_position, _velocity, _tricotcolor) {
             super(_position, _velocity);
-            this.position = _position;
             this.tricotcolor = _tricotcolor;
         }
         draw() {
