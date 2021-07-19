@@ -129,7 +129,7 @@ namespace Fußball_Simulation {
             refereeArray[0].move(1 / 40);
 
             ballArray[0].draw();
-            ballArray[0].move(1 / 30);
+            ballArray[0].move(1 / 20);
 
             // Tor links
             if (ballArray[0].position.X < window.innerWidth * 0.125 && ballArray[0].position.X < window.innerWidth * 0.13 && ballArray[0].position.Y > window.innerHeight * 0.35 && ballArray[0].position.Y < window.innerHeight * 0.65) {
@@ -228,7 +228,7 @@ namespace Fußball_Simulation {
     }
 
     function firstBallMove(_evt: MouseEvent): void {
-        PlaySound(whistle);
+        //PlaySound(whistle);
         let dir: Vector = Vector.getDifference(new Vector(_evt.x, _evt.y), getBall().position);
         dir = dir.normalize();
         dir.scale(50);
