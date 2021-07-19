@@ -6,6 +6,7 @@ var Fußball_Simulation;
     let canvasWidth = window.innerWidth;
     let canvasHeight = window.innerHeight;
     var cheer = new Audio("Assets/cheer.wav");
+    var whistle = new Audio("Assets/whistle.wav");
     let scoreTeam1 = 0;
     let scoreTeam2 = 0;
     let playerArray = [];
@@ -107,7 +108,7 @@ var Fußball_Simulation;
                 PlaySound(cheer);
                 setTimeout(() => {
                     message.innerHTML = "";
-                }, 4000);
+                }, 6000);
             }
             // Unten am Tor vorbei
             if (ballArray[0].position.X < window.innerWidth * 0.125 && ballArray[0].position.Y > window.innerHeight * 0.65) {
@@ -115,7 +116,7 @@ var Fußball_Simulation;
                 message.innerHTML = "so close!";
                 setTimeout(() => {
                     message.innerHTML = "";
-                }, 4000);
+                }, 6000);
             }
             // oben am Tor vorbei
             if (ballArray[0].position.X < window.innerWidth * 0.125 && ballArray[0].position.Y < window.innerHeight * 0.35) {
@@ -123,7 +124,7 @@ var Fußball_Simulation;
                 message.innerHTML = "one more try!";
                 setTimeout(() => {
                     message.innerHTML = "";
-                }, 4000);
+                }, 6000);
             }
             // Tor rechts
             if (ballArray[0].position.X > window.innerWidth * 0.870 && ballArray[0].position.X < window.innerWidth * 0.875 && ballArray[0].position.Y > window.innerHeight * 0.35 && ballArray[0].position.Y < window.innerHeight * 0.65) {
@@ -135,7 +136,7 @@ var Fußball_Simulation;
                 PlaySound(cheer);
                 setTimeout(() => {
                     message.innerHTML = "";
-                }, 4000);
+                }, 6000);
             }
             // Unten am Tor vorbei
             if (ballArray[0].position.X > window.innerWidth * 0.875 && ballArray[0].position.Y > window.innerHeight * 0.65) {
@@ -143,7 +144,7 @@ var Fußball_Simulation;
                 message.innerHTML = "try again!";
                 setTimeout(() => {
                     message.innerHTML = "";
-                }, 4000);
+                }, 6000);
             }
             // oben am Tor vorbei
             if (ballArray[0].position.X > window.innerWidth * 0.875 && ballArray[0].position.Y < window.innerHeight * 0.35) {
@@ -151,7 +152,7 @@ var Fußball_Simulation;
                 message.innerHTML = "next time you got it!";
                 setTimeout(() => {
                     message.innerHTML = "";
-                }, 4000);
+                }, 6000);
             }
             if (ballArray[0].position.X > window.innerWidth * 0.9) {
                 resetGame();
@@ -175,6 +176,7 @@ var Fußball_Simulation;
     }
     Fußball_Simulation.moveBall = moveBall;
     function firstBallMove(_evt) {
+        PlaySound(whistle);
         let dir = Fußball_Simulation.Vector.getDifference(new Fußball_Simulation.Vector(_evt.x, _evt.y), getBall().position);
         dir = dir.normalize();
         dir.scale(50);

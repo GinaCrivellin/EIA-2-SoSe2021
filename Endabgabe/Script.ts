@@ -11,6 +11,7 @@ namespace Fußball_Simulation {
     export let gameStatus: boolean;
 
     var cheer: HTMLAudioElement = new Audio("Assets/cheer.wav");
+    var whistle: HTMLAudioElement = new Audio("Assets/whistle.wav");
 
     let scoreTeam1: number = 0;
     let scoreTeam2: number = 0;
@@ -144,7 +145,7 @@ namespace Fußball_Simulation {
 
                 setTimeout(() => {
                     message.innerHTML = "";
-                },         4000);
+                },         6000);
             }
 
             // Unten am Tor vorbei
@@ -155,7 +156,7 @@ namespace Fußball_Simulation {
 
                 setTimeout(() => {
                     message.innerHTML = "";
-                },         4000);
+                },         6000);
             }
             // oben am Tor vorbei
             if (ballArray[0].position.X < window.innerWidth * 0.125 && ballArray[0].position.Y < window.innerHeight * 0.35) {
@@ -165,7 +166,7 @@ namespace Fußball_Simulation {
 
                 setTimeout(() => {
                     message.innerHTML = "";
-                },         4000);
+                },         6000);
             }
             // Tor rechts
             if (ballArray[0].position.X > window.innerWidth * 0.870 && ballArray[0].position.X < window.innerWidth * 0.875 && ballArray[0].position.Y > window.innerHeight * 0.35 && ballArray[0].position.Y < window.innerHeight * 0.65) {
@@ -180,7 +181,7 @@ namespace Fußball_Simulation {
 
                 setTimeout(() => {
                     message.innerHTML = "";
-                },         4000);
+                },         6000);
             }
             // Unten am Tor vorbei
             if (ballArray[0].position.X > window.innerWidth * 0.875 && ballArray[0].position.Y > window.innerHeight * 0.65) {
@@ -190,7 +191,7 @@ namespace Fußball_Simulation {
 
                 setTimeout(() => {
                     message.innerHTML = "";
-                },         4000);
+                },         6000);
             }
             // oben am Tor vorbei
             if (ballArray[0].position.X > window.innerWidth * 0.875 && ballArray[0].position.Y < window.innerHeight * 0.35) {
@@ -200,7 +201,7 @@ namespace Fußball_Simulation {
 
                 setTimeout(() => {
                     message.innerHTML = "";
-                },         4000);
+                },         6000);
             }
             if (ballArray[0].position.X > window.innerWidth * 0.9) {
                 resetGame();
@@ -227,6 +228,7 @@ namespace Fußball_Simulation {
     }
 
     function firstBallMove(_evt: MouseEvent): void {
+        PlaySound(whistle);
         let dir: Vector = Vector.getDifference(new Vector(_evt.x, _evt.y), getBall().position);
         dir = dir.normalize();
         dir.scale(50);
